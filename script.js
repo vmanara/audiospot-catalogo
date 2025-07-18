@@ -5,13 +5,13 @@ const mockProducts = {
         {
             id: 1,
             title: "Boss DS-1 Distortion Pedal",
-            price: 89.99,
-            oldPrice: 120.00,
-            image: "https://via.placeholder.com/220x160/667eea/ffffff?text=Boss+DS-1",
+            price: 114.00,
+            oldPrice: 383.00,
+            image: "https://s.click.aliexpress.com/e/_oCUjRv0",
             platform: "aliexpress",
             rating: 4.5,
             reviews: 234,
-            affiliate_link: "https://aliexpress.com/item/boss-ds1",
+            affiliate_link: "https://s.click.aliexpress.com/e/_oCUjRv0",
             featured: true,
             trending: false,
             bestseller: false
