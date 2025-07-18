@@ -1,5 +1,5 @@
 
-// Mock data for demonstration - replace with actual API calls
+// Enhanced mock data with more products for better showcase
 const mockProducts = {
     pedais: [
         {
@@ -7,22 +7,42 @@ const mockProducts = {
             title: "Boss DS-1 Distortion Pedal",
             price: 89.99,
             oldPrice: 120.00,
-            image: "https://via.placeholder.com/280x200/667eea/ffffff?text=Boss+DS-1",
+            image: "https://via.placeholder.com/220x160/667eea/ffffff?text=Boss+DS-1",
             platform: "aliexpress",
             rating: 4.5,
             reviews: 234,
-            affiliate_link: "https://aliexpress.com/item/boss-ds1"
+            affiliate_link: "https://aliexpress.com/item/boss-ds1",
+            featured: true,
+            trending: false,
+            bestseller: false
         },
         {
             id: 2,
             title: "Tube Screamer TS9 Clone",
             price: 45.99,
             oldPrice: 65.00,
-            image: "https://via.placeholder.com/280x200/764ba2/ffffff?text=TS9+Clone",
+            image: "https://via.placeholder.com/220x160/764ba2/ffffff?text=TS9+Clone",
             platform: "amazon",
             rating: 4.2,
             reviews: 156,
-            affiliate_link: "https://amazon.com/tube-screamer"
+            affiliate_link: "https://amazon.com/tube-screamer",
+            featured: false,
+            trending: true,
+            bestseller: false
+        },
+        {
+            id: 11,
+            title: "Delay Pedal Digital",
+            price: 129.99,
+            oldPrice: 180.00,
+            image: "https://via.placeholder.com/220x160/e74c3c/ffffff?text=Delay",
+            platform: "aliexpress",
+            rating: 4.6,
+            reviews: 89,
+            affiliate_link: "https://aliexpress.com/delay",
+            featured: false,
+            trending: false,
+            bestseller: true
         }
     ],
     acessorios: [
@@ -31,22 +51,42 @@ const mockProducts = {
             title: "Kit 20 Palhetas Profissionais",
             price: 15.99,
             oldPrice: 25.00,
-            image: "https://via.placeholder.com/280x200/e74c3c/ffffff?text=Palhetas",
+            image: "https://via.placeholder.com/220x160/e74c3c/ffffff?text=Palhetas",
             platform: "mercadolivre",
             rating: 4.8,
             reviews: 892,
-            affiliate_link: "https://mercadolivre.com/palhetas"
+            affiliate_link: "https://mercadolivre.com/palhetas",
+            featured: false,
+            trending: true,
+            bestseller: false
         },
         {
             id: 4,
             title: "Capo Guitarra Premium",
             price: 22.50,
             oldPrice: 35.00,
-            image: "https://via.placeholder.com/280x200/3498db/ffffff?text=Capo",
+            image: "https://via.placeholder.com/220x160/3498db/ffffff?text=Capo",
             platform: "aliexpress",
             rating: 4.6,
             reviews: 445,
-            affiliate_link: "https://aliexpress.com/capo"
+            affiliate_link: "https://aliexpress.com/capo",
+            featured: true,
+            trending: false,
+            bestseller: false
+        },
+        {
+            id: 12,
+            title: "Cordas Guitarra Elétrica",
+            price: 28.99,
+            oldPrice: 40.00,
+            image: "https://via.placeholder.com/220x160/2ecc71/ffffff?text=Cordas",
+            platform: "amazon",
+            rating: 4.4,
+            reviews: 567,
+            affiliate_link: "https://amazon.com/cordas",
+            featured: false,
+            trending: false,
+            bestseller: true
         }
     ],
     homestudio: [
@@ -55,22 +95,42 @@ const mockProducts = {
             title: "Interface Audio USB Behringer",
             price: 299.99,
             oldPrice: 399.00,
-            image: "https://via.placeholder.com/280x200/2ecc71/ffffff?text=Interface",
+            image: "https://via.placeholder.com/220x160/2ecc71/ffffff?text=Interface",
             platform: "amazon",
             rating: 4.4,
             reviews: 678,
-            affiliate_link: "https://amazon.com/behringer-interface"
+            affiliate_link: "https://amazon.com/behringer-interface",
+            featured: true,
+            trending: false,
+            bestseller: false
         },
         {
             id: 6,
             title: "Microfone Condensador BM800",
             price: 129.99,
             oldPrice: 180.00,
-            image: "https://via.placeholder.com/280x200/f39c12/ffffff?text=BM800",
+            image: "https://via.placeholder.com/220x160/f39c12/ffffff?text=BM800",
             platform: "aliexpress",
             rating: 4.3,
             reviews: 1234,
-            affiliate_link: "https://aliexpress.com/bm800"
+            affiliate_link: "https://aliexpress.com/bm800",
+            featured: false,
+            trending: true,
+            bestseller: false
+        },
+        {
+            id: 13,
+            title: "Mesa de Som 8 Canais",
+            price: 189.99,
+            oldPrice: 250.00,
+            image: "https://via.placeholder.com/220x160/9b59b6/ffffff?text=Mesa+Som",
+            platform: "mercadolivre",
+            rating: 4.5,
+            reviews: 234,
+            affiliate_link: "https://mercadolivre.com/mesa-som",
+            featured: false,
+            trending: false,
+            bestseller: true
         }
     ],
     audiotech: [
@@ -79,22 +139,42 @@ const mockProducts = {
             title: "Monitor Referência KRK Rokit 5",
             price: 899.99,
             oldPrice: 1200.00,
-            image: "https://via.placeholder.com/280x200/9b59b6/ffffff?text=KRK+Rokit",
+            image: "https://via.placeholder.com/220x160/9b59b6/ffffff?text=KRK+Rokit",
             platform: "amazon",
             rating: 4.7,
             reviews: 342,
-            affiliate_link: "https://amazon.com/krk-rokit"
+            affiliate_link: "https://amazon.com/krk-rokit",
+            featured: true,
+            trending: false,
+            bestseller: false
         },
         {
             id: 8,
             title: "Fones Studio Profissional",
             price: 199.99,
             oldPrice: 280.00,
-            image: "https://via.placeholder.com/280x200/34495e/ffffff?text=Headphones",
+            image: "https://via.placeholder.com/220x160/34495e/ffffff?text=Headphones",
             platform: "mercadolivre",
             rating: 4.5,
             reviews: 567,
-            affiliate_link: "https://mercadolivre.com/fones"
+            affiliate_link: "https://mercadolivre.com/fones",
+            featured: false,
+            trending: true,
+            bestseller: false
+        },
+        {
+            id: 14,
+            title: "Amplificador Valvulado",
+            price: 599.99,
+            oldPrice: 800.00,
+            image: "https://via.placeholder.com/220x160/e67e22/ffffff?text=Amplificador",
+            platform: "aliexpress",
+            rating: 4.6,
+            reviews: 123,
+            affiliate_link: "https://aliexpress.com/amplificador",
+            featured: false,
+            trending: false,
+            bestseller: true
         }
     ],
     presets: [
@@ -103,22 +183,42 @@ const mockProducts = {
             title: "Pack 500 Presets Guitar Rig",
             price: 39.99,
             oldPrice: 60.00,
-            image: "https://via.placeholder.com/280x200/e67e22/ffffff?text=Presets",
+            image: "https://via.placeholder.com/220x160/e67e22/ffffff?text=Presets",
             platform: "aliexpress",
             rating: 4.9,
             reviews: 123,
-            affiliate_link: "https://aliexpress.com/presets"
+            affiliate_link: "https://aliexpress.com/presets",
+            featured: false,
+            trending: true,
+            bestseller: false
         },
         {
             id: 10,
             title: "Neural DSP Archetype Nolly",
             price: 149.99,
             oldPrice: 179.00,
-            image: "https://via.placeholder.com/280x200/16a085/ffffff?text=Neural+DSP",
+            image: "https://via.placeholder.com/220x160/16a085/ffffff?text=Neural+DSP",
             platform: "amazon",
             rating: 4.8,
             reviews: 89,
-            affiliate_link: "https://amazon.com/neural-dsp"
+            affiliate_link: "https://amazon.com/neural-dsp",
+            featured: true,
+            trending: false,
+            bestseller: false
+        },
+        {
+            id: 15,
+            title: "Ableton Live Suite",
+            price: 599.99,
+            oldPrice: 749.00,
+            image: "https://via.placeholder.com/220x160/1abc9c/ffffff?text=Ableton",
+            platform: "amazon",
+            rating: 4.9,
+            reviews: 456,
+            affiliate_link: "https://amazon.com/ableton",
+            featured: false,
+            trending: false,
+            bestseller: true
         }
     ]
 };
@@ -128,8 +228,6 @@ class ProductCatalog {
         this.products = mockProducts;
         this.currentFilters = {
             platform: 'all',
-            price: 'all',
-            category: 'all',
             search: '',
             sort: 'default'
         };
@@ -139,6 +237,7 @@ class ProductCatalog {
     init() {
         this.setupEventListeners();
         this.renderAllProducts();
+        this.renderSpecialSections();
         this.hideLoading();
     }
 
@@ -155,25 +254,17 @@ class ProductCatalog {
             this.filterProducts();
         });
 
-        // Price filter
-        document.getElementById('priceFilter').addEventListener('change', (e) => {
-            this.currentFilters.price = e.target.value;
-            this.filterProducts();
-        });
-
         // Sort filter
         document.getElementById('sortFilter').addEventListener('change', (e) => {
             this.currentFilters.sort = e.target.value;
             this.filterAndSortProducts();
         });
 
-        // Category navigation
-        document.querySelectorAll('.nav-list a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const category = e.target.dataset.category;
+        // Category cards navigation
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                const category = e.currentTarget.dataset.category;
                 this.scrollToCategory(category);
-                this.highlightNavItem(e.target);
             });
         });
 
@@ -197,6 +288,52 @@ class ProductCatalog {
         Object.keys(this.products).forEach(category => {
             this.renderCategory(category);
         });
+    }
+
+    renderSpecialSections() {
+        this.renderFeatured();
+        this.renderTrending();
+        this.renderBestsellers();
+    }
+
+    renderFeatured() {
+        const container = document.getElementById('featuredProducts');
+        if (!container) return;
+
+        const featuredProducts = this.getAllProducts().filter(p => p.featured);
+        this.renderProductsInContainer(container, featuredProducts);
+    }
+
+    renderTrending() {
+        const container = document.getElementById('trendingProducts');
+        if (!container) return;
+
+        const trendingProducts = this.getAllProducts().filter(p => p.trending);
+        this.renderProductsInContainer(container, trendingProducts);
+    }
+
+    renderBestsellers() {
+        const container = document.getElementById('bestsellerProducts');
+        if (!container) return;
+
+        const bestsellerProducts = this.getAllProducts().filter(p => p.bestseller);
+        this.renderProductsInContainer(container, bestsellerProducts);
+    }
+
+    renderProductsInContainer(container, products) {
+        container.innerHTML = '';
+        products.forEach(product => {
+            const productCard = this.createProductCard(product);
+            container.appendChild(productCard);
+        });
+    }
+
+    getAllProducts() {
+        let allProducts = [];
+        Object.values(this.products).forEach(categoryProducts => {
+            allProducts = allProducts.concat(categoryProducts);
+        });
+        return allProducts;
     }
 
     renderCategory(category) {
@@ -232,7 +369,7 @@ class ProductCatalog {
         const platformClass = `platform-${product.platform}`;
         const platformName = this.getPlatformName(product.platform);
         const stars = this.generateStars(product.rating);
-        const discount = Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100);
+        const discount = product.oldPrice ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100) : 0;
         
         card.dataset.discount = discount;
 
@@ -247,10 +384,10 @@ class ProductCatalog {
                 </div>
                 <div class="product-rating">
                     <span class="stars">${stars}</span>
-                    <span>(${product.reviews} avaliações)</span>
+                    <span>(${product.reviews})</span>
                 </div>
                 <a href="${product.affiliate_link}" target="_blank" rel="noopener" class="product-link">
-                    Ver Oferta ${discount ? `- ${discount}% OFF` : ''}
+                    Ver Produto ${discount > 0 ? `- ${discount}% OFF` : ''}
                 </a>
             </div>
         `;
@@ -308,23 +445,17 @@ class ProductCatalog {
                 }
             }
 
-            // Price filter
-            if (this.currentFilters.price !== 'all') {
-                const price = parseFloat(card.dataset.price);
-                const priceRange = this.currentFilters.price;
-                
-                if (priceRange === '0-50' && (price < 0 || price > 50)) shouldShow = false;
-                if (priceRange === '50-100' && (price < 50 || price > 100)) shouldShow = false;
-                if (priceRange === '100-200' && (price < 100 || price > 200)) shouldShow = false;
-                if (priceRange === '200+' && price < 200) shouldShow = false;
-            }
-
             card.style.display = shouldShow ? 'block' : 'none';
 
             // Count visible products by category
             if (shouldShow) {
-                const category = card.closest('.products-grid').dataset.category;
-                visibleCounts[category] = (visibleCounts[category] || 0) + 1;
+                const categoryContainer = card.closest('.products-grid');
+                if (categoryContainer) {
+                    const category = categoryContainer.dataset.category;
+                    if (category) {
+                        visibleCounts[category] = (visibleCounts[category] || 0) + 1;
+                    }
+                }
             }
         });
 
@@ -344,6 +475,8 @@ class ProductCatalog {
     sortProducts() {
         Object.keys(this.products).forEach(category => {
             const container = document.querySelector(`[data-category="${category}"]`);
+            if (!container) return;
+            
             const cards = Array.from(container.querySelectorAll('.product-card:not([style*="display: none"])'));
             
             cards.sort((a, b) => {
@@ -383,13 +516,6 @@ class ProductCatalog {
         }
     }
 
-    highlightNavItem(clickedItem) {
-        document.querySelectorAll('.nav-list a').forEach(item => {
-            item.classList.remove('active');
-        });
-        clickedItem.classList.add('active');
-    }
-
     hideLoading() {
         const loading = document.getElementById('loading');
         if (loading) {
@@ -398,88 +524,9 @@ class ProductCatalog {
             }, 1000);
         }
     }
-
-    // Method to integrate with real APIs
-    async loadProductsFromAPI(category) {
-        try {
-            // Example API integration structure
-            // Replace with actual AliExpress API calls
-            
-            /*
-            const response = await fetch(`/api/products/${category}`);
-            const data = await response.json();
-            
-            this.products[category] = data.products.map(product => ({
-                id: product.id,
-                title: product.title,
-                price: product.price,
-                oldPrice: product.originalPrice,
-                image: product.imageUrl,
-                platform: product.source, // 'aliexpress', 'amazon', 'mercadolivre'
-                rating: product.rating,
-                reviews: product.reviewCount,
-                affiliate_link: product.affiliateUrl
-            }));
-            
-            this.renderCategory(category);
-            */
-            
-            console.log(`Loading ${category} products from API...`);
-        } catch (error) {
-            console.error('Error loading products:', error);
-        }
-    }
 }
 
 // Initialize the catalog when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new ProductCatalog();
 });
-
-// Add some utility functions for future API integration
-const ApiUtils = {
-    // AliExpress API integration helper
-    formatAliExpressProduct(apiProduct) {
-        return {
-            id: apiProduct.productId,
-            title: apiProduct.productTitle,
-            price: apiProduct.salePrice,
-            oldPrice: apiProduct.originalPrice,
-            image: apiProduct.productMainImageUrl,
-            platform: 'aliexpress',
-            rating: apiProduct.evaluateScore,
-            reviews: apiProduct.evaluateCount,
-            affiliate_link: apiProduct.promotionLink
-        };
-    },
-
-    // Amazon API integration helper
-    formatAmazonProduct(apiProduct) {
-        return {
-            id: apiProduct.ASIN,
-            title: apiProduct.ItemInfo.Title.DisplayValue,
-            price: apiProduct.Offers.Listings[0].Price.Amount,
-            oldPrice: apiProduct.Offers.Listings[0].SavingBasis?.Amount,
-            image: apiProduct.Images.Primary.Large.URL,
-            platform: 'amazon',
-            rating: apiProduct.CustomerReviews?.StarRating,
-            reviews: apiProduct.CustomerReviews?.Count,
-            affiliate_link: apiProduct.DetailPageURL
-        };
-    },
-
-    // Mercado Livre API integration helper
-    formatMercadoLivreProduct(apiProduct) {
-        return {
-            id: apiProduct.id,
-            title: apiProduct.title,
-            price: apiProduct.price,
-            oldPrice: apiProduct.original_price,
-            image: apiProduct.thumbnail,
-            platform: 'mercadolivre',
-            rating: apiProduct.reviews_summary?.rating_average,
-            reviews: apiProduct.reviews_summary?.total,
-            affiliate_link: apiProduct.permalink
-        };
-    }
-};

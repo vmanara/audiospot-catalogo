@@ -17,57 +17,106 @@
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <h1 class="logo">
-                    <i class="fas fa-headphones"></i>
-                    AudioSpot
-                </h1>
-                <p class="subtitle">Equipamentos Musicais Profissionais</p>
-                <p class="tagline">Os melhores preços em produtos originais</p>
+                <div class="header-top">
+                    <div class="logo">
+                        <img src="assets_logo/AudioSpot-logo-fundo-transparente_1752863107224.png" alt="AudioSpot" class="logo-img">
+                    </div>
+                    <a href="https://audiospot.com.br" class="home-link" target="_blank">
+                        <i class="fas fa-home"></i>
+                        Home
+                    </a>
+                </div>
+                <p class="subtitle">Equipamentos Musicais com os Melhores Preços</p>
             </div>
         </div>
     </header>
 
-    <nav class="nav">
-        <div class="container">
-            <ul class="nav-list">
-                <li><a href="#pedais" data-category="pedais">Pedais & Efeitos</a></li>
-                <li><a href="#acessorios" data-category="acessorios">Acessórios Musicais</a></li>
-                <li><a href="#homestudio" data-category="homestudio">Home Studio</a></li>
-                <li><a href="#audiotech" data-category="audiotech">Audio Tech</a></li>
-                <li><a href="#presets" data-category="presets">Presets & Plugins</a></li>
-            </ul>
-        </div>
-    </nav>
-
     <main class="main">
         <div class="container">
-            <div class="filters">
+            <!-- Search Section -->
+            <section class="search-section">
                 <div class="search-container">
                     <i class="fas fa-search"></i>
                     <input type="text" id="searchInput" placeholder="Buscar produtos..." class="search-input">
                 </div>
-                <select id="platformFilter" class="filter-select">
-                    <option value="all">Todas as Plataformas</option>
-                    <option value="aliexpress">AliExpress</option>
-                    <option value="amazon">Amazon</option>
-                    <option value="mercadolivre">Mercado Livre</option>
-                </select>
-                <select id="priceFilter" class="filter-select">
-                    <option value="all">Todos os Preços</option>
-                    <option value="0-50">R$ 0 - 50</option>
-                    <option value="50-100">R$ 50 - 100</option>
-                    <option value="100-200">R$ 100 - 200</option>
-                    <option value="200+">R$ 200+</option>
-                </select>
-                <select id="sortFilter" class="filter-select">
-                    <option value="default">Ordenar por</option>
-                    <option value="price-low">Menor Preço</option>
-                    <option value="price-high">Maior Preço</option>
-                    <option value="rating">Melhor Avaliado</option>
-                    <option value="discount">Maior Desconto</option>
-                </select>
-            </div>
+                <div class="filters">
+                    <select id="platformFilter" class="filter-select">
+                        <option value="all">Todas as Plataformas</option>
+                        <option value="aliexpress">AliExpress</option>
+                        <option value="amazon">Amazon</option>
+                        <option value="mercadolivre">Mercado Livre</option>
+                    </select>
+                    <select id="sortFilter" class="filter-select">
+                        <option value="default">Ordenar por</option>
+                        <option value="price-low">Menor Preço</option>
+                        <option value="price-high">Maior Preço</option>
+                        <option value="rating">Melhor Avaliado</option>
+                        <option value="discount">Maior Desconto</option>
+                    </select>
+                </div>
+            </section>
 
+            <!-- Categories Navigation -->
+            <section class="categories-nav">
+                <h2>Categorias de Produtos</h2>
+                <div class="categories-grid">
+                    <div class="category-card" data-category="pedais">
+                        <div class="category-icon">
+                            <i class="fas fa-guitar"></i>
+                        </div>
+                        <h3>Pedais & Efeitos</h3>
+                        <p>Distorção, delay, reverb e mais</p>
+                    </div>
+                    <div class="category-card" data-category="acessorios">
+                        <div class="category-icon">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <h3>Acessórios</h3>
+                        <p>Palhetas, capots, cordas</p>
+                    </div>
+                    <div class="category-card" data-category="homestudio">
+                        <div class="category-icon">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <h3>Home Studio</h3>
+                        <p>Interfaces, microfones, monitores</p>
+                    </div>
+                    <div class="category-card" data-category="audiotech">
+                        <div class="category-icon">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <h3>Audio Tech</h3>
+                        <p>Fones, amplificadores, processadores</p>
+                    </div>
+                    <div class="category-card" data-category="presets">
+                        <div class="category-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <h3>Presets & Plugins</h3>
+                        <p>Packs de som, plugins VST</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Products -->
+            <section class="featured-section">
+                <h2>Produtos em Destaque</h2>
+                <div class="featured-grid" id="featuredProducts"></div>
+            </section>
+
+            <!-- Trending Now -->
+            <section class="trending-section">
+                <h2>Trending Now</h2>
+                <div class="trending-grid" id="trendingProducts"></div>
+            </section>
+
+            <!-- Best Sellers -->
+            <section class="bestsellers-section">
+                <h2>Best Sellers</h2>
+                <div class="bestsellers-grid" id="bestsellerProducts"></div>
+            </section>
+
+            <!-- Category Sections -->
             <section id="pedais" class="category-section">
                 <div class="section-header">
                     <h2 class="section-title">Pedais & Efeitos</h2>
@@ -119,30 +168,24 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>AudioSpot</h3>
+                    <div class="footer-logo">
+                        <img src="assets_logo/AudioSpot-logo-fundo-transparente_1752863107224.png" alt="AudioSpot" class="footer-logo-img">
+                    </div>
                     <p>Sua referência em equipamentos musicais com os melhores preços e qualidade garantida.</p>
                 </div>
                 <div class="footer-section">
                     <h3>Plataformas Parceiras</h3>
-                    <ul>
-                        <li><i class="fab fa-amazon"></i> Amazon</li>
-                        <li><i class="fas fa-shopping-cart"></i> AliExpress</li>
-                        <li><i class="fas fa-store"></i> Mercado Livre</li>
-                    </ul>
+                    <div class="platform-badges">
+                        <span class="platform-badge aliexpress">AliExpress</span>
+                        <span class="platform-badge amazon">Amazon</span>
+                        <span class="platform-badge mercadolivre">Mercado Livre</span>
+                    </div>
                 </div>
                 <div class="footer-section">
-                    <h3>Categorias</h3>
-                    <ul>
-                        <li>Pedais & Efeitos</li>
-                        <li>Home Studio</li>
-                        <li>Audio Tech</li>
-                        <li>Presets & Plugins</li>
-                    </ul>
+                    <h3>Contato</h3>
+                    <p>contato@audiospot.com</p>
+                    <p>Suporte: support@audiospot.com</p>
                 </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 AudioSpot - Programa de Afiliados</p>
-                <p class="disclaimer">Os preços podem variar nas plataformas parceiras</p>
             </div>
         </div>
     </footer>
