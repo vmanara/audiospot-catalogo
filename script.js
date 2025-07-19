@@ -1,6 +1,11 @@
 // Cache for products
 let productsCache = null;
 
+// Check if Supabase is available
+if (!window.supabase) {
+    console.error('Supabase library not loaded. Products will not be available.');
+}
+
 class AudioSpotApp {
     constructor() {
         this.currentCategory = 'all';
@@ -21,16 +26,27 @@ class AudioSpotApp {
 
     async loadProducts() {
         try {
+            // Check if Supabase client is available
+            if (!supabaseClient) {
+                console.error('Supabase client not available');
+                this.products = [];
+                return;
+            }
+
             this.products = await productService.getAllProducts();
             console.log('Products loaded from Supabase:', this.products);
             
             // If no products found, wait a bit and try again (tables might still be loading)
             if (this.products.length === 0) {
+                console.log('No products found, retrying in 2 seconds...');
                 setTimeout(async () => {
                     try {
                         this.products = await productService.getAllProducts();
+                        console.log('Retry results:', this.products);
                         if (this.products.length > 0) {
                             this.renderProducts();
+                        } else {
+                            console.log('Still no products after retry');
                         }
                     } catch (retryError) {
                         console.error('Retry failed:', retryError);

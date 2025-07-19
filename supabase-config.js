@@ -2,8 +2,13 @@
 const supabaseUrl = 'https://kkyocjjhwmmtetfxmbha.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtreW9jampod21tdGV0ZnhtYmhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MjQwMzYsImV4cCI6MjA2ODUwMDAzNn0.XdGYOVvTXHlXnKXSCiIIUgfx_ngu4cpcIIvebpYDQ04'
 
-const { createClient } = supabase;
-const supabaseClient = createClient(supabaseUrl, supabaseKey);
+// Use the global supabase object from UMD build
+const supabaseClient = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
+
+// Fallback check
+if (!supabaseClient) {
+  console.error('Supabase client could not be initialized. Check if the library is loaded.');
+}
 
 // Database functions
 const productService = {
