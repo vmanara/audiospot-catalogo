@@ -4,110 +4,110 @@
 // Sample products data for each platform
 const aliexpressProducts = [
   {
+    title: "Kokko Distortion (variados)",
+    category: "pedais",
+    price: 45.90,
+    old_price: 68.00,
+    rating: 4.3,
+    reviews: 234,
+    image: "https://ae01.alicdn.com/kf/H123456789.jpg",
+    link: "https://s.click.aliexpress.com/e/_oprO7T8"
+  },
+  {
+    title: "Afinador Mini Pedal Kokko",
+    category: "pedais",
+    price: 32.50,
+    old_price: null,
+    rating: 4.5,
+    reviews: 156,
+    image: "https://ae01.alicdn.com/kf/H987654321.jpg",
+    link: "https://s.click.aliexpress.com/e/_oDBUPWi"
+  },
+  {
+    title: "Controlador MIDI Chocolate",
+    category: "audiotech",
+    price: 89.90,
+    old_price: 120.00,
+    rating: 4.2,
+    reviews: 89,
+    image: "https://ae01.alicdn.com/kf/H567890123.jpg",
+    link: "https://s.click.aliexpress.com/e/_oEd2SDy"
+  },
+  {
+    title: "Palhetas Alice Kit 12 unidades",
+    category: "acessorios",
+    price: 15.90,
+    old_price: null,
+    rating: 4.7,
+    reviews: 445,
+    image: "https://ae01.alicdn.com/kf/H246810357.jpg",
+    link: "https://s.click.aliexpress.com/e/_picks123"
+  }
+];
+
+const amazonProducts = [
+  {
     title: "Audio Interface Focusrite Scarlett Solo",
     category: "homestudio",
     price: 299.99,
     old_price: 450.00,
     rating: 4.6,
     reviews: 892,
-    image: "https://ae01.alicdn.com/kf/Sbb8f8c1234567890.jpg",
-    link: "https://aliexpress.com/item/123456789.html"
+    image: "https://m.media-amazon.com/images/I/61abc123.jpg",
+    link: "https://amzn.to/3scarlett"
   },
   {
-    title: "Suporte Guitarra Universal",
-    category: "acessorios",
-    price: 25.90,
-    old_price: null,
-    rating: 4.2,
-    reviews: 1876,
-    image: "https://ae01.alicdn.com/kf/H123456789.jpg",
-    link: "https://aliexpress.com/item/987654321.html"
-  }
-];
-
-const amazonProducts = [
-  {
-    title: "Boss DS-1 Distortion Pedal",
-    category: "pedais",
-    price: 89.90,
-    old_price: 120.00,
-    rating: 4.5,
-    reviews: 2347,
-    image: "https://m.media-amazon.com/images/I/61hqzSXKvyL._AC_SX466_.jpg",
-    link: "https://amazon.com.br/dp/B0002CZV8E"
-  },
-  {
-    title: "Fender Player Stratocaster Pack",
-    category: "audiotech",
-    price: 2499.99,
-    old_price: 3200.00,
-    rating: 4.9,
-    reviews: 456,
-    image: "https://m.media-amazon.com/images/I/71ABC123DEF.jpg",
-    link: "https://amazon.com.br/dp/B087CDEF123"
-  },
-  {
-    title: "Shure SM57 Microfone Dinâmico",
+    title: "Monitor de Referência KRK Rokit 5",
     category: "homestudio",
-    price: 450.00,
-    old_price: 550.00,
+    price: 189.99,
+    old_price: 249.00,
+    rating: 4.4,
+    reviews: 567,
+    image: "https://m.media-amazon.com/images/I/61krk456.jpg",
+    link: "https://amzn.to/3krk5"
+  },
+  {
+    title: "Cabo XLR Mogami Gold",
+    category: "acessorios",
+    price: 45.90,
+    old_price: null,
     rating: 4.8,
-    reviews: 3421,
-    image: "https://m.media-amazon.com/images/I/41DEF456GHI.jpg",
-    link: "https://amazon.com.br/dp/B000CZ0R42"
-  },
-  {
-    title: "Neural DSP Archetype Nolly",
-    category: "presets",
-    price: 199.00,
-    old_price: 250.00,
-    rating: 4.7,
     reviews: 234,
-    image: "https://m.media-amazon.com/images/I/61XYZ789ABC.jpg",
-    link: "https://amazon.com.br/dp/B098765432"
-  },
-  {
-    title: "Ableton Live Suite (Download)",
-    category: "presets",
-    price: 599.00,
-    old_price: 750.00,
-    rating: 4.9,
-    reviews: 89,
-    image: "https://m.media-amazon.com/images/I/51GHI789JKL.jpg",
-    link: "https://amazon.com.br/dp/B087JKLMNO"
+    image: "https://m.media-amazon.com/images/I/61mogami.jpg",
+    link: "https://amzn.to/3mogami"
   }
 ];
 
 const mercadolivreProducts = [
   {
-    title: "Cabo P10 Mono 3m Monster Cable",
-    category: "acessorios",
-    price: 45.90,
-    old_price: null,
-    rating: 4.8,
-    reviews: 1543,
-    image: "https://http2.mlstatic.com/D_NQ_NP_2X_665847-MLB32848350474_112019-F.webp",
-    link: "https://produto.mercadolivre.com.br/MLB-123456789"
+    title: "Guitarra Tagima TG-500 Stratocaster",
+    category: "homestudio",
+    price: 450.00,
+    old_price: 550.00,
+    rating: 4.3,
+    reviews: 123,
+    image: "https://http2.mlstatic.com/D_NQ_NP_123.jpg",
+    link: "https://produto.mercadolivre.com.br/MLB-tagima"
   },
   {
-    title: "TC Electronic Ditto Looper",
+    title: "Pedal Boss DS-1 Distortion",
     category: "pedais",
-    price: 350.00,
-    old_price: 420.00,
-    rating: 4.4,
-    reviews: 678,
-    image: "https://http2.mlstatic.com/D_NQ_NP_2X_789012-MLB.webp",
-    link: "https://produto.mercadolivre.com.br/MLB-987654321"
+    price: 199.90,
+    old_price: 250.00,
+    rating: 4.6,
+    reviews: 89,
+    image: "https://http2.mlstatic.com/D_NQ_NP_456.jpg",
+    link: "https://produto.mercadolivre.com.br/MLB-boss"
   },
   {
-    title: "Marshall DSL40CR Amplificador",
-    category: "audiotech",
-    price: 1899.99,
-    old_price: 2300.00,
-    rating: 4.6,
-    reviews: 156,
-    image: "https://http2.mlstatic.com/D_NQ_NP_2X_456789-MLB.webp",
-    link: "https://produto.mercadolivre.com.br/MLB-456789123"
+    title: "Cabo P10 Santo Angelo 3 metros",
+    category: "acessorios",
+    price: 35.90,
+    old_price: null,
+    rating: 4.4,
+    reviews: 567,
+    image: "https://http2.mlstatic.com/D_NQ_NP_789.jpg",
+    link: "https://produto.mercadolivre.com.br/MLB-cabo"
   }
 ];
 
@@ -116,52 +116,73 @@ async function migrateToNewTables() {
     console.log('Starting migration to platform-specific tables...');
     
     try {
-        // Migrate existing products from old table
+        // Clear existing data in new tables first
+        await clearAllTables();
+        
+        // Migrate existing products from old table to new tables
+        console.log('Migrating existing products from old table...');
         await productService.migrateExistingProducts();
         
         // Add sample products to each platform
         console.log('Adding AliExpress products...');
         for (const product of aliexpressProducts) {
-            await productService.addProduct(product, 'aliexpress');
-            console.log(`Added AliExpress product: ${product.title}`);
+            try {
+                await productService.addProduct(product, 'aliexpress');
+                console.log(`✓ Added AliExpress product: ${product.title}`);
+            } catch (error) {
+                console.error(`✗ Error adding AliExpress product: ${product.title}`, error);
+            }
         }
         
         console.log('Adding Amazon products...');
         for (const product of amazonProducts) {
-            await productService.addProduct(product, 'amazon');
-            console.log(`Added Amazon product: ${product.title}`);
+            try {
+                await productService.addProduct(product, 'amazon');
+                console.log(`✓ Added Amazon product: ${product.title}`);
+            } catch (error) {
+                console.error(`✗ Error adding Amazon product: ${product.title}`, error);
+            }
         }
         
         console.log('Adding Mercado Livre products...');
         for (const product of mercadolivreProducts) {
-            await productService.addProduct(product, 'mercadolivre');
-            console.log(`Added Mercado Livre product: ${product.title}`);
+            try {
+                await productService.addProduct(product, 'mercadolivre');
+                console.log(`✓ Added Mercado Livre product: ${product.title}`);
+            } catch (error) {
+                console.error(`✗ Error adding Mercado Livre product: ${product.title}`, error);
+            }
         }
         
-        console.log('Migration completed successfully!');
+        console.log('✅ Migration completed successfully!');
         
         // Test the new functions
         console.log('\n--- Testing new functions ---');
         const allProducts = await productService.getAllProducts();
-        console.log(`Total products loaded: ${allProducts.length}`);
+        console.log(`📊 Total products loaded: ${allProducts.length}`);
         
         const aliexpressOnly = await productService.getProductsByPlatform('aliexpress');
-        console.log(`AliExpress products: ${aliexpressOnly.length}`);
+        console.log(`🛒 AliExpress products: ${aliexpressOnly.length}`);
         
         const amazonOnly = await productService.getProductsByPlatform('amazon');
-        console.log(`Amazon products: ${amazonOnly.length}`);
+        console.log(`📦 Amazon products: ${amazonOnly.length}`);
         
         const mercadolivreOnly = await productService.getProductsByPlatform('mercadolivre');
-        console.log(`Mercado Livre products: ${mercadolivreOnly.length}`);
+        console.log(`🛍️ Mercado Livre products: ${mercadolivreOnly.length}`);
+        
+        // Reload page to show new products
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
         
     } catch (error) {
-        console.error('Error during migration:', error);
+        console.error('❌ Error during migration:', error);
     }
 }
 
 // Clear all platform tables
 async function clearAllTables() {
-    console.log('Clearing all platform tables...');
+    console.log('🧹 Clearing all platform tables...');
     
     try {
         await Promise.all([
@@ -169,9 +190,9 @@ async function clearAllTables() {
             supabaseClient.from('amazon_products').delete().neq('id', 0),
             supabaseClient.from('mercadolivre_products').delete().neq('id', 0)
         ]);
-        console.log('All tables cleared!');
+        console.log('✅ All tables cleared!');
     } catch (error) {
-        console.error('Error clearing tables:', error);
+        console.error('❌ Error clearing tables:', error);
     }
 }
 
@@ -179,5 +200,33 @@ async function clearAllTables() {
 window.migrateToNewTables = migrateToNewTables;
 window.clearAllTables = clearAllTables;
 
-// Auto-run migration on page load (comment out if not needed)
-// migrateToNewTables();
+// Auto-run migration when script loads
+document.addEventListener('DOMContentLoaded', () => {
+    // Add buttons to trigger migration manually
+    const migrationDiv = document.createElement('div');
+    migrationDiv.style.cssText = `
+        position: fixed; 
+        top: 10px; 
+        right: 10px; 
+        z-index: 1000; 
+        background: white; 
+        padding: 10px; 
+        border: 1px solid #ccc; 
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    `;
+    
+    const migrateButton = document.createElement('button');
+    migrateButton.textContent = 'Migrar para Novas Tabelas';
+    migrateButton.style.cssText = 'margin: 5px; padding: 8px 12px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer;';
+    migrateButton.onclick = migrateToNewTables;
+    
+    const clearButton = document.createElement('button');
+    clearButton.textContent = 'Limpar Tabelas';
+    clearButton.style.cssText = 'margin: 5px; padding: 8px 12px; background: #dc3545; color: white; border: none; border-radius: 3px; cursor: pointer;';
+    clearButton.onclick = clearAllTables;
+    
+    migrationDiv.appendChild(migrateButton);
+    migrationDiv.appendChild(clearButton);
+    document.body.appendChild(migrationDiv);
+});
