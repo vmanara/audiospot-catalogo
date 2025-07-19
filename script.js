@@ -26,17 +26,16 @@ class AudioSpotApp {
 
     async loadProducts() {
         try {
-            // Wait for Supabase client to be available with more retries
+            // Wait for Supabase client to be available with fewer retries
             let retries = 0;
-            while ((!supabaseClient || !window.productService) && retries < 30) {
+            while ((!supabaseClient || !window.productService) && retries < 10) {
                 console.log(`Waiting for Supabase client... (attempt ${retries + 1})`);
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 500));
                 retries++;
             }
 
             if (!supabaseClient) {
                 console.error('Supabase client not available after retries');
-                // Show a message to user
                 this.showConnectionError();
                 this.products = [];
                 return;
@@ -52,23 +51,11 @@ class AudioSpotApp {
             this.products = await productService.getAllProducts();
             console.log('✅ Products loaded from Supabase:', this.products.length, 'products');
 
-            // If no products found, try multiple times
+            // Only retry once if no products found
             if (this.products.length === 0) {
-                console.log('No products found, retrying multiple times...');
-                
-                for (let attempt = 1; attempt <= 3; attempt++) {
-                    await new Promise(resolve => setTimeout(resolve, 2000 * attempt));
-                    try {
-                        this.products = await productService.getAllProducts();
-                        console.log(`Retry attempt ${attempt} results:`, this.products.length, 'products');
-                        if (this.products.length > 0) {
-                            this.renderProducts();
-                            break;
-                        }
-                    } catch (retryError) {
-                        console.error(`Retry attempt ${attempt} failed:`, retryError);
-                    }
-                }
+                console.log('No products found, trying once more...');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                this.products = await productService.getAllProducts();
                 
                 if (this.products.length === 0) {
                     this.showNoProductsMessage();
@@ -194,31 +181,70 @@ class AudioSpotApp {
 
         // Apply category filter
         if (this.currentCategory !== 'all') {
+            console.log(`🔍 Filtering by category: ${this.currentCategory}`);
+            
             filteredProducts = filteredProducts.filter(product => {
                 const productCategory = product.category?.toLowerCase() || '';
+                const productTitle = product.title?.toLowerCase() || '';
                 const filterCategory = this.currentCategory.toLowerCase();
                 
-                // Map filter categories to database categories
-                const categoryMappings = {
-                    'pedais': ['pedal', 'distorção', 'afinador', 'delay', 'reverb', 'overdrive'],
-                    'acessorios': ['acessório', 'cabo', 'palheta', 'correia', 'suporte'],
-                    'homestudio': ['interface', 'monitor', 'microfone', 'fone', 'audio interface'],
-                    'audiotech': ['controlador', 'midi', 'sintetizador', 'sampler'],
-                    'presets': ['preset', 'plugin', 'vst', 'sample']
-                };
+                console.log(`Checking product: "${product.title}" | Category: "${product.category}"`);
                 
-                // Check direct match first
-                if (productCategory.includes(filterCategory)) {
-                    return true;
+                let isMatch = false;
+                
+                switch(filterCategory) {
+                    case 'pedais':
+                        isMatch = productCategory.includes('pedal') || 
+                                 productCategory.includes('distorção') || 
+                                 productCategory.includes('afinador') ||
+                                 productTitle.includes('pedal') ||
+                                 productTitle.includes('kokko') ||
+                                 productTitle.includes('distortion');
+                        break;
+                        
+                    case 'acessorios':
+                        isMatch = productCategory.includes('acessório') || 
+                                 productCategory.includes('cabo') || 
+                                 productCategory.includes('palheta') ||
+                                 productTitle.includes('palheta') ||
+                                 productTitle.includes('cabo') ||
+                                 productTitle.includes('alice');
+                        break;
+                        
+                    case 'homestudio':
+                        isMatch = productCategory.includes('interface') || 
+                                 productCategory.includes('monitor') || 
+                                 productCategory.includes('microfone') ||
+                                 productTitle.includes('interface') ||
+                                 productTitle.includes('monitor') ||
+                                 productTitle.includes('focusrite') ||
+                                 productTitle.includes('krk');
+                        break;
+                        
+                    case 'audiotech':
+                        isMatch = productCategory.includes('controlador') || 
+                                 productCategory.includes('midi') ||
+                                 productTitle.includes('midi') ||
+                                 productTitle.includes('controlador') ||
+                                 productTitle.includes('chocolate');
+                        break;
+                        
+                    case 'presets':
+                        isMatch = productCategory.includes('preset') || 
+                                 productCategory.includes('plugin') ||
+                                 productTitle.includes('preset') ||
+                                 productTitle.includes('plugin');
+                        break;
+                        
+                    default:
+                        isMatch = false;
                 }
                 
-                // Check mapped categories
-                const mappedCategories = categoryMappings[filterCategory] || [];
-                return mappedCategories.some(mapped => 
-                    productCategory.includes(mapped) || 
-                    product.title.toLowerCase().includes(mapped)
-                );
+                console.log(`${isMatch ? '✅' : '❌'} Product "${product.title}" matches filter "${filterCategory}": ${isMatch}`);
+                return isMatch;
             });
+            
+            console.log(`📋 Filtered products count: ${filteredProducts.length}`);
         }
 
         // Apply search filter
@@ -414,7 +440,7 @@ class AudioSpotApp {
 window.updatePricesFromLinks = async function() {
     if (!productService) {
         console.error('Product service not available');
-        return;
+        return false;
     }
     
     console.log('🔄 Iniciando atualização de preços...');
@@ -422,12 +448,11 @@ window.updatePricesFromLinks = async function() {
     
     if (success) {
         console.log('✅ Preços atualizados com sucesso!');
-        // Recarregar página para mostrar novos preços
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
+        // Apenas recarregar se chamado manualmente, não automaticamente
+        return true;
     } else {
         console.error('❌ Erro ao atualizar preços');
+        return false;
     }
 };
 
@@ -469,7 +494,23 @@ function createUpdatePricesButton() {
         button.disabled = true;
         
         try {
-            await window.updatePricesFromLinks();
+            const success = await window.updatePricesFromLinks();
+            if (success) {
+                button.innerHTML = '✅ Atualizado!';
+                button.style.background = '#28a745';
+                // Recarregar apenas quando o usuário clica no botão
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                button.innerHTML = '❌ Erro';
+                button.style.background = '#dc3545';
+                setTimeout(() => {
+                    button.innerHTML = '💰 Atualizar Preços';
+                    button.style.background = '#28a745';
+                    button.disabled = false;
+                }, 3000);
+            }
         } catch (error) {
             console.error('Erro:', error);
             button.innerHTML = '❌ Erro';

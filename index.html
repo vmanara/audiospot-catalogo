@@ -278,32 +278,70 @@
 
                 // Category filter
                 if (this.currentCategory !== 'all') {
+                    console.log(`🔍 Filtering by category: ${this.currentCategory}`);
+                    
                     filtered = filtered.filter(product => {
                         const productCategory = product.category?.toLowerCase() || '';
                         const productTitle = product.title?.toLowerCase() || '';
                         const filterCategory = this.currentCategory.toLowerCase();
                         
-                        // Map filter categories to database categories
-                        const categoryMappings = {
-                            'pedais': ['pedal', 'distorção', 'afinador', 'delay', 'reverb', 'overdrive'],
-                            'acessorios': ['acessório', 'cabo', 'palheta', 'correia', 'suporte'],
-                            'homestudio': ['interface', 'monitor', 'microfone', 'fone', 'audio interface'],
-                            'audiotech': ['controlador', 'midi', 'sintetizador', 'sampler'],
-                            'presets': ['preset', 'plugin', 'vst', 'sample']
-                        };
+                        console.log(`Checking: "${product.title}" | Category: "${product.category}"`);
                         
-                        // Check direct match first
-                        if (productCategory.includes(filterCategory) || productTitle.includes(filterCategory)) {
-                            return true;
+                        let isMatch = false;
+                        
+                        switch(filterCategory) {
+                            case 'pedais':
+                                isMatch = productCategory.includes('pedal') || 
+                                         productCategory.includes('distorção') || 
+                                         productCategory.includes('afinador') ||
+                                         productTitle.includes('pedal') ||
+                                         productTitle.includes('kokko') ||
+                                         productTitle.includes('distortion');
+                                break;
+                                
+                            case 'acessorios':
+                                isMatch = productCategory.includes('acessório') || 
+                                         productCategory.includes('cabo') || 
+                                         productCategory.includes('palheta') ||
+                                         productTitle.includes('palheta') ||
+                                         productTitle.includes('cabo') ||
+                                         productTitle.includes('alice');
+                                break;
+                                
+                            case 'homestudio':
+                                isMatch = productCategory.includes('interface') || 
+                                         productCategory.includes('monitor') || 
+                                         productCategory.includes('microfone') ||
+                                         productTitle.includes('interface') ||
+                                         productTitle.includes('monitor') ||
+                                         productTitle.includes('focusrite') ||
+                                         productTitle.includes('krk');
+                                break;
+                                
+                            case 'audiotech':
+                                isMatch = productCategory.includes('controlador') || 
+                                         productCategory.includes('midi') ||
+                                         productTitle.includes('midi') ||
+                                         productTitle.includes('controlador') ||
+                                         productTitle.includes('chocolate');
+                                break;
+                                
+                            case 'presets':
+                                isMatch = productCategory.includes('preset') || 
+                                         productCategory.includes('plugin') ||
+                                         productTitle.includes('preset') ||
+                                         productTitle.includes('plugin');
+                                break;
+                                
+                            default:
+                                isMatch = false;
                         }
                         
-                        // Check mapped categories
-                        const mappedCategories = categoryMappings[filterCategory] || [];
-                        return mappedCategories.some(mapped => 
-                            productCategory.includes(mapped) || 
-                            productTitle.includes(mapped)
-                        );
+                        console.log(`${isMatch ? '✅' : '❌'} "${product.title}" matches "${filterCategory}": ${isMatch}`);
+                        return isMatch;
                     });
+                    
+                    console.log(`📋 Filtered products: ${filtered.length}`);
                 }
 
                 // Search filter
