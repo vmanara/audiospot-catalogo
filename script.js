@@ -194,22 +194,45 @@ class AudioSpotApp {
 
         // Apply category filter
         if (this.currentCategory !== 'all') {
-            filteredProducts = filteredProducts.filter(product =>
-                product.category === this.currentCategory
-            );
+            filteredProducts = filteredProducts.filter(product => {
+                const productCategory = product.category?.toLowerCase() || '';
+                const filterCategory = this.currentCategory.toLowerCase();
+                
+                // Map filter categories to database categories
+                const categoryMappings = {
+                    'pedais': ['pedal', 'distorção', 'afinador', 'delay', 'reverb', 'overdrive'],
+                    'acessorios': ['acessório', 'cabo', 'palheta', 'correia', 'suporte'],
+                    'homestudio': ['interface', 'monitor', 'microfone', 'fone', 'audio interface'],
+                    'audiotech': ['controlador', 'midi', 'sintetizador', 'sampler'],
+                    'presets': ['preset', 'plugin', 'vst', 'sample']
+                };
+                
+                // Check direct match first
+                if (productCategory.includes(filterCategory)) {
+                    return true;
+                }
+                
+                // Check mapped categories
+                const mappedCategories = categoryMappings[filterCategory] || [];
+                return mappedCategories.some(mapped => 
+                    productCategory.includes(mapped) || 
+                    product.title.toLowerCase().includes(mapped)
+                );
+            });
         }
 
         // Apply search filter
         if (this.searchTerm) {
             filteredProducts = filteredProducts.filter(product =>
-                product.title.toLowerCase().includes(this.searchTerm)
+                product.title.toLowerCase().includes(this.searchTerm) ||
+                (product.category && product.category.toLowerCase().includes(this.searchTerm))
             );
         }
 
         // Apply platform filter
         if (this.currentPlatform !== 'all') {
             filteredProducts = filteredProducts.filter(product =>
-                product.platform === this.currentPlatform
+                product.platform.toLowerCase() === this.currentPlatform.toLowerCase()
             );
         }
 

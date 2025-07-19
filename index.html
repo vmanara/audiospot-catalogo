@@ -278,16 +278,39 @@
 
                 // Category filter
                 if (this.currentCategory !== 'all') {
-                    filtered = filtered.filter(p => 
-                        p.category?.toLowerCase().includes(this.currentCategory) ||
-                        p.title?.toLowerCase().includes(this.currentCategory)
-                    );
+                    filtered = filtered.filter(product => {
+                        const productCategory = product.category?.toLowerCase() || '';
+                        const productTitle = product.title?.toLowerCase() || '';
+                        const filterCategory = this.currentCategory.toLowerCase();
+                        
+                        // Map filter categories to database categories
+                        const categoryMappings = {
+                            'pedais': ['pedal', 'distorção', 'afinador', 'delay', 'reverb', 'overdrive'],
+                            'acessorios': ['acessório', 'cabo', 'palheta', 'correia', 'suporte'],
+                            'homestudio': ['interface', 'monitor', 'microfone', 'fone', 'audio interface'],
+                            'audiotech': ['controlador', 'midi', 'sintetizador', 'sampler'],
+                            'presets': ['preset', 'plugin', 'vst', 'sample']
+                        };
+                        
+                        // Check direct match first
+                        if (productCategory.includes(filterCategory) || productTitle.includes(filterCategory)) {
+                            return true;
+                        }
+                        
+                        // Check mapped categories
+                        const mappedCategories = categoryMappings[filterCategory] || [];
+                        return mappedCategories.some(mapped => 
+                            productCategory.includes(mapped) || 
+                            productTitle.includes(mapped)
+                        );
+                    });
                 }
 
                 // Search filter
                 if (this.searchTerm) {
                     filtered = filtered.filter(p =>
-                        p.title?.toLowerCase().includes(this.searchTerm)
+                        p.title?.toLowerCase().includes(this.searchTerm) ||
+                        p.category?.toLowerCase().includes(this.searchTerm)
                     );
                 }
 
