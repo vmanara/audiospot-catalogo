@@ -96,8 +96,6 @@
         </div>
     </section>
 
-    
-
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -142,43 +140,299 @@
         </div>
     </footer>
 
-    <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js" async></script>
+    <!-- Supabase Library -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <!-- Main Application Script -->
     <script>
-        // Load scripts sequentially for better compatibility
-        function loadScript(src, callback) {
-            const script = document.createElement('script');
-            script.src = src;
-            script.async = false;
-            script.onload = callback;
-            script.onerror = () => console.error(`Failed to load ${src}`);
-            document.head.appendChild(script);
+        // Global variables
+        window.supabaseClient = null;
+        
+        // Supabase configuration
+        const supabaseUrl = 'https://kkyocjjhwmmtetfxmbha.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtreW9jampod21tdGV0ZnhtYmhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MjQwMzYsImV4cCI6MjA2ODUwMDAzNn0.XdGYOVvTXHlXnKXSCiIIUgfx_ngu4cpcIIvebpYDQ04';
+
+        // Initialize Supabase
+        function initSupabase() {
+            try {
+                if (window.supabase && window.supabase.createClient) {
+                    window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+                    console.log('✅ Supabase initialized');
+                    return true;
+                }
+            } catch (error) {
+                console.error('❌ Supabase init error:', error);
+            }
+            return false;
         }
 
-        // Wait for DOM and Supabase library
-        document.addEventListener('DOMContentLoaded', () => {
-            // Load scripts in sequence
-            loadScript('price-extractor.js', () => {
-                loadScript('supabase-config.js', () => {
-                    loadScript('price-manager.js', () => {
-                        loadScript('script.js', () => {
-                            console.log('✅ All scripts loaded');
-                        });
+        // Main App Class
+        class AudioSpotApp {
+            constructor() {
+                this.products = [];
+                this.visibleProducts = 6;
+                this.currentCategory = 'all';
+                this.init();
+            }
+
+            async init() {
+                console.log('🚀 Initializing AudioSpot...');
+                
+                // Wait for Supabase
+                let attempts = 0;
+                while (!initSupabase() && attempts < 20) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    attempts++;
+                }
+
+                if (!window.supabaseClient) {
+                    this.showError('Não foi possível conectar ao banco de dados');
+                    return;
+                }
+
+                await this.loadProducts();
+                this.setupEventListeners();
+                this.renderProducts();
+            }
+
+            async loadProducts() {
+                if (!window.supabaseClient) {
+                    this.showError('Cliente Supabase não disponível');
+                    return;
+                }
+
+                try {
+                    console.log('🔍 Carregando produtos...');
+                    
+                    const [aliexpressResult, amazonResult, mercadolivreResult] = await Promise.allSettled([
+                        window.supabaseClient.from('aliexpress_products').select('*'),
+                        window.supabaseClient.from('amazon_products').select('*'),
+                        window.supabaseClient.from('mercadolivre_products').select('*')
+                    ]);
+
+                    let allProducts = [];
+
+                    // Process results
+                    if (aliexpressResult.status === 'fulfilled' && aliexpressResult.value.data) {
+                        const products = aliexpressResult.value.data.map(p => ({...p, platform: 'aliexpress'}));
+                        allProducts = allProducts.concat(products);
+                        console.log(`✅ ${products.length} produtos AliExpress`);
+                    }
+
+                    if (amazonResult.status === 'fulfilled' && amazonResult.value.data) {
+                        const products = amazonResult.value.data.map(p => ({...p, platform: 'amazon'}));
+                        allProducts = allProducts.concat(products);
+                        console.log(`✅ ${products.length} produtos Amazon`);
+                    }
+
+                    if (mercadolivreResult.status === 'fulfilled' && mercadolivreResult.value.data) {
+                        const products = mercadolivreResult.value.data.map(p => ({...p, platform: 'mercadolivre'}));
+                        allProducts = allProducts.concat(products);
+                        console.log(`✅ ${products.length} produtos Mercado Livre`);
+                    }
+
+                    this.products = allProducts;
+                    console.log(`📊 Total: ${this.products.length} produtos`);
+
+                    if (this.products.length === 0) {
+                        this.showNoProducts();
+                    }
+
+                } catch (error) {
+                    console.error('❌ Erro ao carregar produtos:', error);
+                    this.showError('Erro ao carregar produtos');
+                }
+            }
+
+            setupEventListeners() {
+                // Search
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('input', (e) => {
+                        this.searchTerm = e.target.value.toLowerCase();
+                        this.renderProducts();
+                    });
+                }
+
+                // Category tabs
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.currentCategory = e.target.dataset.category;
+                        this.updateActiveTab(e.target);
+                        this.renderProducts();
                     });
                 });
-            });
 
-            // Load production check script
-            loadScript('production-check.js');
+                // Load more
+                const loadMoreBtn = document.getElementById('loadMoreBtn');
+                if (loadMoreBtn) {
+                    loadMoreBtn.addEventListener('click', () => {
+                        this.visibleProducts += 6;
+                        this.renderProducts();
+                    });
+                }
+            }
 
-            // Development scripts - only load in dev environment
-            if (window.location.hostname === 'localhost' || 
-                window.location.hostname.includes('replit') || 
-                window.location.hostname.includes('repl.co')) {
-                
-                setTimeout(() => {
-                    loadScript('create-tables.js');
-                    loadScript('migrate-data.js');
-                }, 2000);
+            getFilteredProducts() {
+                let filtered = [...this.products];
+
+                // Category filter
+                if (this.currentCategory !== 'all') {
+                    filtered = filtered.filter(p => 
+                        p.category?.toLowerCase().includes(this.currentCategory) ||
+                        p.title?.toLowerCase().includes(this.currentCategory)
+                    );
+                }
+
+                // Search filter
+                if (this.searchTerm) {
+                    filtered = filtered.filter(p =>
+                        p.title?.toLowerCase().includes(this.searchTerm)
+                    );
+                }
+
+                return filtered;
+            }
+
+            renderProducts() {
+                const grid = document.getElementById('productsGrid');
+                if (!grid) return;
+
+                const filtered = this.getFilteredProducts();
+                const visible = filtered.slice(0, this.visibleProducts);
+
+                if (visible.length === 0) {
+                    this.showNoProducts();
+                    return;
+                }
+
+                grid.innerHTML = '';
+
+                visible.forEach(product => {
+                    const card = this.createProductCard(product);
+                    grid.appendChild(card);
+                });
+
+                // Update load more button
+                const loadMoreBtn = document.getElementById('loadMoreBtn');
+                if (loadMoreBtn) {
+                    loadMoreBtn.style.display = 
+                        filtered.length <= this.visibleProducts ? 'none' : 'block';
+                }
+            }
+
+            createProductCard(product) {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+
+                const platformName = this.getPlatformName(product.platform);
+                const price = parseFloat(product.price) || 0;
+                const rating = product.rating || 4.0;
+                const reviews = product.reviews || 0;
+
+                card.innerHTML = `
+                    <img src="${product.image || 'https://via.placeholder.com/300x200?text=Produto'}" 
+                         alt="${product.title}" 
+                         class="product-image" 
+                         onerror="this.src='https://via.placeholder.com/300x200?text=Produto'">
+                    <div class="product-info">
+                        <span class="product-platform platform-${product.platform?.toLowerCase()}">${platformName}</span>
+                        <h3 class="product-title">${product.title}</h3>
+                        <div class="product-price">
+                            <span class="current-price">R$ ${price.toFixed(2)}</span>
+                        </div>
+                        <div class="product-rating">
+                            <span class="stars">${this.generateStars(rating)}</span>
+                            <span>(${reviews} ${reviews === 1 ? 'avaliação' : 'avaliações'})</span>
+                        </div>
+                        <a href="${product.link}" class="product-link" target="_blank">
+                            Ver Produto
+                        </a>
+                    </div>
+                `;
+
+                return card;
+            }
+
+            getPlatformName(platform) {
+                const platforms = {
+                    aliexpress: 'AliExpress',
+                    amazon: 'Amazon',
+                    mercadolivre: 'Mercado Livre'
+                };
+                return platforms[platform?.toLowerCase()] || platform || 'AliExpress';
+            }
+
+            generateStars(rating) {
+                const fullStars = Math.floor(rating);
+                const hasHalf = rating % 1 !== 0;
+                let stars = '';
+
+                for (let i = 0; i < fullStars; i++) {
+                    stars += '<i class="fas fa-star"></i>';
+                }
+
+                if (hasHalf) {
+                    stars += '<i class="fas fa-star-half-alt"></i>';
+                }
+
+                const empty = 5 - Math.ceil(rating);
+                for (let i = 0; i < empty; i++) {
+                    stars += '<i class="far fa-star"></i>';
+                }
+
+                return stars;
+            }
+
+            updateActiveTab(activeTab) {
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                activeTab.classList.add('active');
+            }
+
+            showError(message) {
+                const grid = document.getElementById('productsGrid');
+                if (grid) {
+                    grid.innerHTML = `
+                        <div style="text-align: center; padding: 40px; grid-column: 1/-1;">
+                            <h3>❌ ${message}</h3>
+                            <button onclick="window.location.reload()" 
+                                    style="padding: 10px 20px; margin-top: 10px; background: #FF6B35; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                                🔄 Tentar Novamente
+                            </button>
+                        </div>
+                    `;
+                }
+            }
+
+            showNoProducts() {
+                const grid = document.getElementById('productsGrid');
+                if (grid) {
+                    grid.innerHTML = `
+                        <div style="text-align: center; padding: 40px; grid-column: 1/-1;">
+                            <h3>📦 Nenhum Produto Encontrado</h3>
+                            <p>Os produtos estão sendo carregados...</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🎯 DOM Ready - Starting AudioSpot');
+            new AudioSpotApp();
+        });
+
+        // Smooth scrolling
+        document.addEventListener('click', (e) => {
+            if (e.target.matches('a[href^="#"]')) {
+                e.preventDefault();
+                const target = document.querySelector(e.target.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
             }
         });
     </script>
