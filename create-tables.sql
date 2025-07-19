@@ -1,13 +1,12 @@
 
--- Criar tabelas separadas para cada plataforma
+-- SQL script to create platform-specific tables without old_price column
 
--- Tabela para produtos do AliExpress
+-- Create AliExpress products table
 CREATE TABLE IF NOT EXISTS aliexpress_products (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     category VARCHAR(100),
     price DECIMAL(10,2) DEFAULT 0,
-    old_price DECIMAL(10,2),
     image TEXT,
     rating DECIMAL(2,1),
     reviews INTEGER,
@@ -15,13 +14,15 @@ CREATE TABLE IF NOT EXISTS aliexpress_products (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Tabela para produtos da Amazon
+-- Remove old_price column if it exists
+ALTER TABLE aliexpress_products DROP COLUMN IF EXISTS old_price;
+
+-- Create Amazon products table
 CREATE TABLE IF NOT EXISTS amazon_products (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     category VARCHAR(100),
     price DECIMAL(10,2) DEFAULT 0,
-    old_price DECIMAL(10,2),
     image TEXT,
     rating DECIMAL(2,1),
     reviews INTEGER,
@@ -29,13 +30,15 @@ CREATE TABLE IF NOT EXISTS amazon_products (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Tabela para produtos do Mercado Livre
+-- Remove old_price column if it exists
+ALTER TABLE amazon_products DROP COLUMN IF EXISTS old_price;
+
+-- Create Mercado Livre products table
 CREATE TABLE IF NOT EXISTS mercadolivre_products (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     category VARCHAR(100),
     price DECIMAL(10,2) DEFAULT 0,
-    old_price DECIMAL(10,2),
     image TEXT,
     rating DECIMAL(2,1),
     reviews INTEGER,
@@ -43,11 +46,5 @@ CREATE TABLE IF NOT EXISTS mercadolivre_products (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Índices para melhor performance
-CREATE INDEX IF NOT EXISTS idx_aliexpress_category ON aliexpress_products(category);
-CREATE INDEX IF NOT EXISTS idx_amazon_category ON amazon_products(category);
-CREATE INDEX IF NOT EXISTS idx_mercadolivre_category ON mercadolivre_products(category);
-
-CREATE INDEX IF NOT EXISTS idx_aliexpress_price ON aliexpress_products(price);
-CREATE INDEX IF NOT EXISTS idx_amazon_price ON amazon_products(price);
-CREATE INDEX IF NOT EXISTS idx_mercadolivre_price ON mercadolivre_products(price);
+-- Remove old_price column if it exists
+ALTER TABLE mercadolivre_products DROP COLUMN IF EXISTS old_price;

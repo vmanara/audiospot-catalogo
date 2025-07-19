@@ -264,6 +264,58 @@ const productService = {
     return true;
   },
 
+  // Update prices from affiliate links
+  async updatePricesFromLinks() {
+    if (!window.priceExtractor) {
+      console.error('Price extractor not available');
+      return;
+    }
+
+    console.log('🔄 Updating prices from affiliate links...');
+    
+    try {
+      const allProducts = await this.getAllProducts();
+      const updatePromises = [];
+
+      for (const product of allProducts) {
+        if (product.link && product.platform) {
+          console.log(`📋 Checking price for: ${product.title}`);
+          
+          try {
+            const priceData = await window.priceExtractor.getPriceInBRL(product.link, product.platform);
+            
+            if (priceData && priceData.price > 0) {
+              const roundedPrice = Math.round(priceData.price * 100) / 100;
+              console.log(`💰 Found price for ${product.title}: R$ ${roundedPrice}`);
+              
+              const updatePromise = this.updateProduct(product.id, { 
+                price: roundedPrice 
+              }, product.platform);
+              
+              updatePromises.push(updatePromise);
+            } else {
+              console.log(`❌ No price found for: ${product.title}`);
+            }
+            
+            // Add delay to avoid rate limiting
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          } catch (error) {
+            console.error(`Error updating price for ${product.title}:`, error);
+          }
+        }
+      }
+
+      // Wait for all updates to complete
+      await Promise.all(updatePromises);
+      console.log('✅ Price update completed!');
+      
+      return true;
+    } catch (error) {
+      console.error('❌ Error updating prices from links:', error);
+      return false;
+    }
+  },
+
   // Migrate existing products from old table to new tables
   async migrateExistingProducts() {
     try {

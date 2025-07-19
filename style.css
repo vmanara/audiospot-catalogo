@@ -1,4 +1,3 @@
-
 /* Reset e Variáveis */
 * {
     margin: 0;
@@ -374,17 +373,13 @@ body {
 }
 
 .product-price {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
+    margin: 10px 0;
 }
 
-.product-old-price {
-    font-size: 1rem;
-    color: var(--text-light);
-    text-decoration: line-through;
-    margin-left: 0.5rem;
+.current-price {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #27ae60;
 }
 
 .product-rating {
@@ -571,47 +566,47 @@ body {
     .container {
         padding: 0 15px;
     }
-    
+
     .nav {
         display: none;
     }
-    
+
     .hero .container {
         grid-template-columns: 1fr;
         text-align: center;
     }
-    
+
     .hero-content h2 {
         font-size: 2rem;
     }
-    
+
     .hero-buttons {
         justify-content: center;
     }
-    
+
     .hero-icon {
         font-size: 8rem;
     }
-    
+
     .products-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .category-tabs {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .tab-btn {
         width: 100%;
         max-width: 300px;
     }
-    
+
     .filters {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .filters select {
         width: 100%;
         max-width: 300px;
@@ -622,20 +617,20 @@ body {
     .hero {
         padding: 120px 0 60px;
     }
-    
+
     .hero-content h2 {
         font-size: 1.5rem;
     }
-    
+
     .hero-buttons {
         flex-direction: column;
         gap: 0.5rem;
     }
-    
+
     .section-title {
         font-size: 2rem;
     }
-    
+
     .about-content h2 {
         font-size: 2rem;
     }

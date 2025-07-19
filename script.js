@@ -43,7 +43,7 @@ class AudioSpotApp {
             console.log('🔄 Loading products from Supabase...');
             this.products = await productService.getAllProducts();
             console.log('✅ Products loaded from Supabase:', this.products.length, 'products');
-            
+
             // If no products found, wait a bit and try again (tables might still be loading)
             if (this.products.length === 0) {
                 console.log('No products found, retrying in 2 seconds...');
@@ -229,9 +229,8 @@ class AudioSpotApp {
         const rating = product.rating || 4.0;
         const reviews = product.reviews || 0;
         const price = parseFloat(product.price) || 0;
-        const oldPrice = product.old_price ? parseFloat(product.old_price) : null;
         const stars = this.generateStars(rating);
-        
+
         // Use placeholder image if none provided
         const imageUrl = product.image || 'https://via.placeholder.com/300x200?text=Produto';
 
@@ -241,8 +240,7 @@ class AudioSpotApp {
                 <span class="product-platform platform-${product.platform?.toLowerCase() || 'aliexpress'}">${platformName}</span>
                 <h3 class="product-title">${product.title}</h3>
                 <div class="product-price">
-                    ${price > 0 ? `R$ ${price.toFixed(2)}` : 'Consulte o preço'}
-                    ${oldPrice ? `<span class="product-old-price">R$ ${oldPrice.toFixed(2)}</span>` : ''}
+                    
                 </div>
                 <div class="product-rating">
                     <span class="stars">${stars}</span>
@@ -254,6 +252,14 @@ class AudioSpotApp {
             </div>
         `;
 
+        // Price section - only show current price
+        const priceSection = document.createElement('div');
+        priceSection.className = 'product-price';
+
+        const currentPrice = product.price > 0 ? product.price.toFixed(2) : '0,00';
+        priceSection.innerHTML = `<span class="current-price">R$ ${currentPrice}</span>`;
+
+        card.querySelector('.product-info').insertBefore(priceSection, card.querySelector('.product-rating'));
         return card;
     }
 

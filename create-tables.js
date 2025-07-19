@@ -6,58 +6,52 @@ async function createPlatformTables() {
     
     try {
         // Create AliExpress table
-        const aliexpressResult = await supabaseClient.rpc('exec_sql', {
-            sql: `
-                CREATE TABLE IF NOT EXISTS aliexpress_products (
-                    id SERIAL PRIMARY KEY,
-                    title VARCHAR(255) NOT NULL,
-                    category VARCHAR(100),
-                    price DECIMAL(10,2) DEFAULT 0,
-                    old_price DECIMAL(10,2),
-                    image TEXT,
-                    rating DECIMAL(2,1),
-                    reviews INTEGER,
-                    link TEXT,
-                    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-                );
-            `
-        });
-        
-        // Create Amazon table
-        const amazonResult = await supabaseClient.rpc('exec_sql', {
-            sql: `
-                CREATE TABLE IF NOT EXISTS amazon_products (
-                    id SERIAL PRIMARY KEY,
-                    title VARCHAR(255) NOT NULL,
-                    category VARCHAR(100),
-                    price DECIMAL(10,2) DEFAULT 0,
-                    old_price DECIMAL(10,2),
-                    image TEXT,
-                    rating DECIMAL(2,1),
-                    reviews INTEGER,
-                    link TEXT,
-                    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-                );
-            `
-        });
-        
-        // Create Mercado Livre table
-        const mercadolivreResult = await supabaseClient.rpc('exec_sql', {
-            sql: `
-                CREATE TABLE IF NOT EXISTS mercadolivre_products (
-                    id SERIAL PRIMARY KEY,
-                    title VARCHAR(255) NOT NULL,
-                    category VARCHAR(100),
-                    price DECIMAL(10,2) DEFAULT 0,
-                    old_price DECIMAL(10,2),
-                    image TEXT,
-                    rating DECIMAL(2,1),
-                    reviews INTEGER,
-                    link TEXT,
-                    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-                );
-            `
-        });
+        // Execute the SQL script to create tables and remove old_price column
+        const sqlScript = `
+            -- Create AliExpress products table
+            CREATE TABLE IF NOT EXISTS aliexpress_products (
+                id SERIAL PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                category VARCHAR(100),
+                price DECIMAL(10,2) DEFAULT 0,
+                image TEXT,
+                rating DECIMAL(2,1),
+                reviews INTEGER,
+                link TEXT,
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+            );
+            ALTER TABLE aliexpress_products DROP COLUMN IF EXISTS old_price;
+
+            -- Create Amazon products table
+            CREATE TABLE IF NOT EXISTS amazon_products (
+                id SERIAL PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                category VARCHAR(100),
+                price DECIMAL(10,2) DEFAULT 0,
+                image TEXT,
+                rating DECIMAL(2,1),
+                reviews INTEGER,
+                link TEXT,
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+            );
+            ALTER TABLE amazon_products DROP COLUMN IF EXISTS old_price;
+
+            -- Create Mercado Livre products table
+            CREATE TABLE IF NOT EXISTS mercadolivre_products (
+                id SERIAL PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                category VARCHAR(100),
+                price DECIMAL(10,2) DEFAULT 0,
+                image TEXT,
+                rating DECIMAL(2,1),
+                reviews INTEGER,
+                link TEXT,
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+            );
+            ALTER TABLE mercadolivre_products DROP COLUMN IF EXISTS old_price;
+        `;
+
+        const result = await supabaseClient.rpc('exec_sql', { sql: sqlScript });
         
         console.log('✅ Platform tables created successfully!');
         
