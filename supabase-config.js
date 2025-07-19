@@ -2,12 +2,31 @@
 const supabaseUrl = 'https://kkyocjjhwmmtetfxmbha.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtreW9jampod21tdGV0ZnhtYmhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MjQwMzYsImV4cCI6MjA2ODUwMDAzNn0.XdGYOVvTXHlXnKXSCiIIUgfx_ngu4cpcIIvebpYDQ04'
 
-// Use the global supabase object from UMD build
-const supabaseClient = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
+// Wait for window.supabase to be available
+let supabaseClient = null;
 
-// Fallback check
-if (!supabaseClient) {
-  console.error('Supabase client could not be initialized. Check if the library is loaded.');
+function initSupabase() {
+  if (window.supabase && window.supabase.createClient) {
+    try {
+      supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+      console.log('✅ Supabase client initialized successfully');
+      return true;
+    } catch (error) {
+      console.error('❌ Error initializing Supabase client:', error);
+      return false;
+    }
+  }
+  return false;
+}
+
+// Try to initialize immediately
+if (!initSupabase()) {
+  // If not available, wait a bit and try again
+  setTimeout(() => {
+    if (!initSupabase()) {
+      console.error('❌ Supabase library not available after timeout');
+    }
+  }, 1000);
 }
 
 // Database functions
@@ -30,7 +49,14 @@ const productService = {
 
   // Get all products from all platforms
   async getAllProducts() {
+    if (!supabaseClient) {
+      console.error('Supabase client not initialized');
+      return [];
+    }
+
     try {
+      console.log('🔍 Fetching products from all platforms...');
+      
       const [aliexpressResult, amazonResult, mercadolivreResult] = await Promise.allSettled([
         supabaseClient.from('aliexpress_products').select('*'),
         supabaseClient.from('amazon_products').select('*'),
@@ -39,33 +65,58 @@ const productService = {
 
       let allProducts = [];
 
-      if (aliexpressResult.status === 'fulfilled' && aliexpressResult.value.data) {
-        const aliexpressProducts = aliexpressResult.value.data.map(product => ({
-          ...product,
-          platform: 'aliexpress'
-        }));
-        allProducts = allProducts.concat(aliexpressProducts);
+      // Process AliExpress products
+      if (aliexpressResult.status === 'fulfilled') {
+        if (aliexpressResult.value.error) {
+          console.error('Error fetching AliExpress products:', aliexpressResult.value.error);
+        } else if (aliexpressResult.value.data) {
+          const aliexpressProducts = aliexpressResult.value.data.map(product => ({
+            ...product,
+            platform: 'aliexpress'
+          }));
+          allProducts = allProducts.concat(aliexpressProducts);
+          console.log(`✅ Loaded ${aliexpressProducts.length} AliExpress products`);
+        }
+      } else {
+        console.error('AliExpress query failed:', aliexpressResult.reason);
       }
 
-      if (amazonResult.status === 'fulfilled' && amazonResult.value.data) {
-        const amazonProducts = amazonResult.value.data.map(product => ({
-          ...product,
-          platform: 'amazon'
-        }));
-        allProducts = allProducts.concat(amazonProducts);
+      // Process Amazon products
+      if (amazonResult.status === 'fulfilled') {
+        if (amazonResult.value.error) {
+          console.error('Error fetching Amazon products:', amazonResult.value.error);
+        } else if (amazonResult.value.data) {
+          const amazonProducts = amazonResult.value.data.map(product => ({
+            ...product,
+            platform: 'amazon'
+          }));
+          allProducts = allProducts.concat(amazonProducts);
+          console.log(`✅ Loaded ${amazonProducts.length} Amazon products`);
+        }
+      } else {
+        console.error('Amazon query failed:', amazonResult.reason);
       }
 
-      if (mercadolivreResult.status === 'fulfilled' && mercadolivreResult.value.data) {
-        const mercadolivreProducts = mercadolivreResult.value.data.map(product => ({
-          ...product,
-          platform: 'mercadolivre'
-        }));
-        allProducts = allProducts.concat(mercadolivreProducts);
+      // Process Mercado Livre products
+      if (mercadolivreResult.status === 'fulfilled') {
+        if (mercadolivreResult.value.error) {
+          console.error('Error fetching Mercado Livre products:', mercadolivreResult.value.error);
+        } else if (mercadolivreResult.value.data) {
+          const mercadolivreProducts = mercadolivreResult.value.data.map(product => ({
+            ...product,
+            platform: 'mercadolivre'
+          }));
+          allProducts = allProducts.concat(mercadolivreProducts);
+          console.log(`✅ Loaded ${mercadolivreProducts.length} Mercado Livre products`);
+        }
+      } else {
+        console.error('Mercado Livre query failed:', mercadolivreResult.reason);
       }
 
+      console.log(`📊 Total products loaded: ${allProducts.length}`);
       return allProducts;
     } catch (error) {
-      console.error('Error getting all products:', error);
+      console.error('❌ Error getting all products:', error);
       return [];
     }
   },

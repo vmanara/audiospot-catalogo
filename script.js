@@ -26,15 +26,23 @@ class AudioSpotApp {
 
     async loadProducts() {
         try {
-            // Check if Supabase client is available
+            // Wait for Supabase client to be available
+            let retries = 0;
+            while (!supabaseClient && retries < 10) {
+                console.log(`Waiting for Supabase client... (attempt ${retries + 1})`);
+                await new Promise(resolve => setTimeout(resolve, 500));
+                retries++;
+            }
+
             if (!supabaseClient) {
-                console.error('Supabase client not available');
+                console.error('Supabase client not available after retries');
                 this.products = [];
                 return;
             }
 
+            console.log('🔄 Loading products from Supabase...');
             this.products = await productService.getAllProducts();
-            console.log('Products loaded from Supabase:', this.products);
+            console.log('✅ Products loaded from Supabase:', this.products.length, 'products');
             
             // If no products found, wait a bit and try again (tables might still be loading)
             if (this.products.length === 0) {
