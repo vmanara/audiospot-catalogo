@@ -142,22 +142,45 @@
         </div>
     </footer>
 
-    <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-    <script src="price-extractor.js"></script>
-    <script src="supabase-config.js"></script>
-    <script src="price-manager.js"></script>
-    <script src="script.js"></script>
-    <!-- Development scripts - only load in dev environment -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js" async></script>
     <script>
-        if (window.location.hostname === 'localhost' || window.location.hostname.includes('replit') || window.location.hostname.includes('repl.co')) {
-            const createTablesScript = document.createElement('script');
-            createTablesScript.src = 'create-tables.js';
-            document.head.appendChild(createTablesScript);
-            
-            const migrateScript = document.createElement('script');
-            migrateScript.src = 'migrate-data.js';
-            document.head.appendChild(migrateScript);
+        // Load scripts sequentially for better compatibility
+        function loadScript(src, callback) {
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = false;
+            script.onload = callback;
+            script.onerror = () => console.error(`Failed to load ${src}`);
+            document.head.appendChild(script);
         }
+
+        // Wait for DOM and Supabase library
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load scripts in sequence
+            loadScript('price-extractor.js', () => {
+                loadScript('supabase-config.js', () => {
+                    loadScript('price-manager.js', () => {
+                        loadScript('script.js', () => {
+                            console.log('✅ All scripts loaded');
+                        });
+                    });
+                });
+            });
+
+            // Load production check script
+            loadScript('production-check.js');
+
+            // Development scripts - only load in dev environment
+            if (window.location.hostname === 'localhost' || 
+                window.location.hostname.includes('replit') || 
+                window.location.hostname.includes('repl.co')) {
+                
+                setTimeout(() => {
+                    loadScript('create-tables.js');
+                    loadScript('migrate-data.js');
+                }, 2000);
+            }
+        });
     </script>
 </body>
 </html>

@@ -6,7 +6,7 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 let supabaseClient = null;
 
 function initSupabase() {
-  if (window.supabase && window.supabase.createClient) {
+  if (typeof window !== 'undefined' && window.supabase && window.supabase.createClient) {
     try {
       supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
       console.log('✅ Supabase client initialized successfully');
@@ -19,15 +19,26 @@ function initSupabase() {
   return false;
 }
 
-// Try to initialize immediately
-if (!initSupabase()) {
-  // If not available, wait a bit and try again
+// Multiple initialization attempts for better compatibility
+function attemptInitialization(attempts = 0) {
+  if (attempts >= 20) {
+    console.error('❌ Supabase library not available after all attempts');
+    return;
+  }
+
+  if (initSupabase()) {
+    console.log('✅ Supabase initialized successfully!');
+    return;
+  }
+
+  // Try again after delay
   setTimeout(() => {
-    if (!initSupabase()) {
-      console.error('❌ Supabase library not available after timeout');
-    }
-  }, 1000);
+    attemptInitialization(attempts + 1);
+  }, 500);
 }
+
+// Start initialization attempts
+attemptInitialization();
 
 // Database functions
 const productService = {
