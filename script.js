@@ -144,11 +144,11 @@ class AudioSpotApp {
         return products.sort((a, b) => {
             switch (this.currentSort) {
                 case 'price-low':
-                    return a.price - b.price;
+                    return (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0);
                 case 'price-high':
-                    return b.price - a.price;
+                    return (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0);
                 case 'rating':
-                    return b.rating - a.rating;
+                    return (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0);
                 default:
                     return 0;
             }
@@ -187,23 +187,28 @@ class AudioSpotApp {
         const card = document.createElement('div');
         card.className = 'product-card loading';
 
-        const platformName = this.getPlatformName(product.platform);
-        const stars = this.generateStars(product.rating);
-        const discount = product.oldPrice ? 
-            Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100) : 0;
+        const platformName = this.getPlatformName(product.platform?.toLowerCase() || 'aliexpress');
+        const rating = product.rating || 4.0;
+        const reviews = product.reviews || 0;
+        const price = parseFloat(product.price) || 0;
+        const oldPrice = product.old_price ? parseFloat(product.old_price) : null;
+        const stars = this.generateStars(rating);
+        
+        // Use placeholder image if none provided
+        const imageUrl = product.image || 'https://via.placeholder.com/300x200?text=Produto';
 
         card.innerHTML = `
-            <img src="${product.image}" alt="${product.title}" class="product-image">
+            <img src="${imageUrl}" alt="${product.title}" class="product-image" onerror="this.src='https://via.placeholder.com/300x200?text=Produto'">
             <div class="product-info">
-                <span class="product-platform platform-${product.platform}">${platformName}</span>
+                <span class="product-platform platform-${product.platform?.toLowerCase() || 'aliexpress'}">${platformName}</span>
                 <h3 class="product-title">${product.title}</h3>
                 <div class="product-price">
-                    R$ ${product.price.toFixed(2)}
-                    ${product.oldPrice ? `<span class="product-old-price">R$ ${product.oldPrice.toFixed(2)}</span>` : ''}
+                    ${price > 0 ? `R$ ${price.toFixed(2)}` : 'Consulte o preço'}
+                    ${oldPrice ? `<span class="product-old-price">R$ ${oldPrice.toFixed(2)}</span>` : ''}
                 </div>
                 <div class="product-rating">
                     <span class="stars">${stars}</span>
-                    <span>(${product.reviews} avaliações)</span>
+                    <span>(${reviews} ${reviews === 1 ? 'avaliação' : 'avaliações'})</span>
                 </div>
                 <a href="${product.link}" class="product-link" target="_blank">
                     Ver Produto
@@ -218,9 +223,10 @@ class AudioSpotApp {
         const platforms = {
             aliexpress: 'AliExpress',
             amazon: 'Amazon',
-            mercadolivre: 'Mercado Livre'
+            mercadolivre: 'Mercado Livre',
+            'mercado livre': 'Mercado Livre'
         };
-        return platforms[platform] || platform;
+        return platforms[platform?.toLowerCase()] || platform || 'AliExpress';
     }
 
     generateStars(rating) {
