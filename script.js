@@ -1,537 +1,363 @@
-// Cache for products
-let productsCache = null;
 
-// Check if Supabase is available
-if (!window.supabase) {
-    console.error('Supabase library not loaded. Products will not be available.');
-}
-
-class AudioSpotApp {
-    constructor() {
-        this.currentCategory = 'all';
-        this.currentPlatform = 'all';
-        this.currentSort = 'default';
-        this.searchTerm = '';
-        this.visibleProducts = 6;
-        this.products = [];
-        this.init();
+// Dados dos produtos das planilhas CSV
+const productsData = [
+    // Planilha 2 - BR_BRL_pt
+    {
+        id: "1005005743785108",
+        imageUrl: "https://ae-pic-a1.aliexpress-media.com/kf/S5430360cec534b68bd452b7c24958d04R.png",
+        videoUrl: "https://video.aliexpress-media.com/play/u/ae_sg_item/2671489089/p/1/e/6/t/10301/1100165245500.mp4",
+        title: "Idsonix nvme gabinete 10gbps usb 3.2 hub docking station sata ssd caso multiport usb divisor hdmi-compatível leitor de cartão sd/tf",
+        originalPrice: 799.58,
+        discountPrice: 399.79,
+        discount: 50,
+        currency: "BRL",
+        commissionRate: 3.0,
+        estimatedCommission: 11.99,
+        sales180Day: 14,
+        positiveFeedback: 100.0,
+        trackingUrl: "https://s.click.aliexpress.com/e/_oEO3nyL",
+        category: "tech"
+    },
+    {
+        id: "1005006356702381",
+        imageUrl: "https://ae-pic-a1.aliexpress-media.com/kf/Sa5415f22fc3744f49a74bcd11b136f6bj.jpg",
+        title: "Fifine microfone dinâmico usb/xlr com controle rgb/jack de fone de ouvido/mudo, microfone para gravação de jogos de pc streaming AmpliGame-AM8",
+        originalPrice: 565.42,
+        discountPrice: 270.98,
+        discount: 52,
+        currency: "BRL",
+        commissionRate: 6.0,
+        estimatedCommission: 16.26,
+        sales180Day: 7979,
+        positiveFeedback: 98.4,
+        trackingUrl: "https://s.click.aliexpress.com/e/_oDbvt83",
+        category: "audio"
+    },
+    {
+        id: "1005005676541013",
+        imageUrl: "https://ae-pic-a1.aliexpress-media.com/kf/S1e3085e53200457a81bc105ea22f22627.jpg",
+        title: "Mooer-GWF4 Interruptor Pedal sem fio, Pedal Controlador para Prime P1, Pedal de Guitarra Inteligente e Guitarra Elétrica Gtrs",
+        originalPrice: 772.50,
+        discountPrice: 231.76,
+        discount: 70,
+        currency: "BRL",
+        commissionRate: 7.0,
+        estimatedCommission: 16.22,
+        sales180Day: 78,
+        positiveFeedback: 90.9,
+        trackingUrl: "https://s.click.aliexpress.com/e/_oD2489p",
+        category: "instruments"
+    },
+    {
+        id: "1005009106410625",
+        imageUrl: "https://ae-pic-a1.aliexpress-media.com/kf/A9bdb723d5e69409c83a70728b671300cN.jpg",
+        title: "Mouse Pad Gamer Hibrido/Control Profissional 45x40 Branco Preto Liso Hexágono Ergonômico Titorion",
+        originalPrice: 99.90,
+        discountPrice: 79.92,
+        discount: 20,
+        currency: "BRL",
+        commissionRate: 8.0,
+        estimatedCommission: 6.39,
+        sales180Day: 14,
+        positiveFeedback: 100.0,
+        trackingUrl: "https://s.click.aliexpress.com/e/_oErQWt1",
+        category: "accessories"
+    },
+    {
+        id: "1005007856413519",
+        imageUrl: "https://ae-pic-a1.aliexpress-media.com/kf/Se3bea03b7db643129fcd47f0d7573306I.jpg",
+        title: "M-VAVE-B Multi-Effect Bass Pedal, recarregável, 36 Presets, 9 Preamp Slots, 8 IR Cab Slots, 3 Simulação, Delay, Reverb Efeitos",
+        originalPrice: 827.71,
+        discountPrice: 372.47,
+        discount: 55,
+        currency: "BRL",
+        commissionRate: 7.0,
+        estimatedCommission: 26.07,
+        sales180Day: 37,
+        positiveFeedback: 97.1,
+        trackingUrl: "https://s.click.aliexpress.com/e/_omYjEMf",
+        category: "instruments"
+    },
+    {
+        id: "1005004153310145",
+        imageUrl: "https://ae-pic-a1.aliexpress-media.com/kf/S399791cc54684c9287daf00bb620ef2aW.jpg",
+        title: "Doremidi expressão pedal conversor interruptor pedal guitarra instrumento musical guitarra elétrica sustentar pedal expansor Mpc-10",
+        originalPrice: 493.97,
+        discountPrice: 246.99,
+        discount: 50,
+        currency: "BRL",
+        commissionRate: 7.0,
+        estimatedCommission: 17.29,
+        sales180Day: 5,
+        positiveFeedback: 0.0,
+        trackingUrl: "https://s.click.aliexpress.com/e/_oFMojaR",
+        category: "instruments"
+    },
+    // Planilha1 track - BR_BRL_pt (alguns produtos principais)
+    {
+        id: "1005004316858924",
+        imageUrl: "https://ae-pic-a1.aliexpress-media.com/kf/S81e4e5c12a6b430b93570ea8853ad38bz.jpg",
+        videoUrl: "https://video.aliexpress-media.com/play/u/ae_sg_item/231207176/p/1/e/6/t/10301/1100044538528.mp4",
+        title: "Estação de acoplamento USB C Hagibis com gabinete SSD M.2 compatível com HDMI duplo Ethernet 100W PD USB Hub SD/TF para laptop Macbook Pro",
+        originalPrice: 642.55,
+        discountPrice: 404.79,
+        discount: 37,
+        currency: "BRL",
+        commissionRate: 8.0,
+        estimatedCommission: 32.38,
+        sales180Day: 134,
+        positiveFeedback: 94.1,
+        trackingUrl: "https://s.click.aliexpress.com/e/_oFezQsf",
+        category: "tech"
+    },
+    {
+        id: "1005006812428491",
+        imageUrl: "https://ae-pic-a1.aliexpress-media.com/kf/Sd03a7ea58ed04f058f2599dbf0a77867q.jpg",
+        title: "KOKKO-Mini Tuner Guitarra Elétrica, Pedal Efeito com Display LED, True Bypass, Efeitos de Guitarra, Acessórios Instrumento",
+        originalPrice: 33.38,
+        discountPrice: 16.69,
+        discount: 50,
+        currency: "BRL",
+        commissionRate: 7.0,
+        estimatedCommission: 1.17,
+        sales180Day: 166,
+        positiveFeedback: 89.1,
+        trackingUrl: "https://s.click.aliexpress.com/e/_ol6jIND",
+        category: "instruments"
+    },
+    {
+        id: "1005006142652231",
+        imageUrl: "https://ae-pic-a1.aliexpress-media.com/kf/S380d8edbb7c84dff8628be66d4e1744eH.jpg",
+        title: "Mixer de som FIFINE para microfone condensador com botão de ganho, interface de áudio com alimentação fantasma de 48V para microfone XLR Podcast-Ampli1",
+        originalPrice: 434.70,
+        discountPrice: 347.75,
+        discount: 20,
+        currency: "BRL",
+        commissionRate: 5.5,
+        estimatedCommission: 19.13,
+        sales180Day: 231,
+        positiveFeedback: 95.8,
+        trackingUrl: "https://s.click.aliexpress.com/e/_okqCuMX",
+        category: "audio"
+    },
+    {
+        id: "1005007044861794",
+        imageUrl: "https://ae-pic-a1.aliexpress-media.com/kf/S0d509576798548949c7cb5c4223d99b9D.jpg",
+        title: "FIFINE 1440p Full HD PC Webcam com microfone, tripé, para desktop e laptop USB, webcam de transmissão ao vivo para chamadas de vídeo-K420",
+        originalPrice: 362.75,
+        discountPrice: 130.59,
+        discount: 64,
+        currency: "BRL",
+        commissionRate: 3.0,
+        estimatedCommission: 3.92,
+        sales180Day: 7234,
+        positiveFeedback: 96.0,
+        trackingUrl: "https://s.click.aliexpress.com/e/_oB8bs3l",
+        category: "tech"
+    },
+    {
+        id: "1005006756452012",
+        imageUrl: "https://ae-pic-a1.aliexpress-media.com/kf/Sbb6f7f7479f147c4b64dde8985c246cbn.png",
+        title: "Delux m900pro mouse para jogos sem fio ergonômico 8k taxa de pesquisa paw3395 63g doca de carregamento rgb magnético para mão direita grande pc gamer",
+        originalPrice: 285.94,
+        discountPrice: 239.57,
+        discount: 16,
+        currency: "BRL",
+        commissionRate: 8.0,
+        estimatedCommission: 19.17,
+        sales180Day: 6619,
+        positiveFeedback: 97.2,
+        trackingUrl: "https://s.click.aliexpress.com/e/_oCh9pzN",
+        category: "tech"
     }
+];
 
-    async init() {
-        this.setupEventListeners();
-        await this.loadProducts();
-        this.renderProducts();
-        this.initAnimations();
-    }
-
-    async loadProducts() {
-        try {
-            // Wait for Supabase client to be available with fewer retries
-            let retries = 0;
-            while ((!supabaseClient || !window.productService) && retries < 10) {
-                console.log(`Waiting for Supabase client... (attempt ${retries + 1})`);
-                await new Promise(resolve => setTimeout(resolve, 500));
-                retries++;
-            }
-
-            if (!supabaseClient) {
-                console.error('Supabase client not available after retries');
-                this.showConnectionError();
-                this.products = [];
-                return;
-            }
-
-            if (!window.productService) {
-                console.error('Product service not available');
-                this.products = [];
-                return;
-            }
-
-            console.log('🔄 Loading products from Supabase...');
-            this.products = await productService.getAllProducts();
-            console.log('✅ Products loaded from Supabase:', this.products.length, 'products');
-
-            // Only retry once if no products found
-            if (this.products.length === 0) {
-                console.log('No products found, trying once more...');
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                this.products = await productService.getAllProducts();
-                
-                if (this.products.length === 0) {
-                    this.showNoProductsMessage();
-                }
-            }
-        } catch (error) {
-            console.error('Error loading products:', error);
-            this.showConnectionError();
-            this.products = [];
-        }
-    }
-
-    showConnectionError() {
-        const productsGrid = document.getElementById('productsGrid');
-        if (productsGrid) {
-            productsGrid.innerHTML = `
-                <div style="text-align: center; padding: 40px; grid-column: 1/-1;">
-                    <h3>❌ Erro de Conexão</h3>
-                    <p>Não foi possível conectar ao banco de dados.</p>
-                    <button onclick="window.location.reload()" style="padding: 10px 20px; margin-top: 10px;">
-                        🔄 Tentar Novamente
-                    </button>
-                </div>
-            `;
-        }
-    }
-
-    showNoProductsMessage() {
-        const productsGrid = document.getElementById('productsGrid');
-        if (productsGrid) {
-            productsGrid.innerHTML = `
-                <div style="text-align: center; padding: 40px; grid-column: 1/-1;">
-                    <h3>📦 Nenhum Produto Encontrado</h3>
-                    <p>Os produtos estão sendo carregados...</p>
-                    <button onclick="window.location.reload()" style="padding: 10px 20px; margin-top: 10px;">
-                        🔄 Recarregar
-                    </button>
-                </div>
-            `;
-        }
-    }
-
-    setupEventListeners() {
-        // Navigation
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const target = e.target.getAttribute('href');
-                this.scrollToSection(target);
-                this.updateActiveNav(e.target);
-            });
-        });
-
-        // Category tabs
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                this.currentCategory = e.target.dataset.category;
-                this.updateActiveTab(e.target);
-                this.renderProducts();
-            });
-        });
-
-        // Search
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                this.searchTerm = e.target.value.toLowerCase();
-                this.renderProducts();
-            });
-        }
-
-        // Filters
-        const categoryFilter = document.getElementById('categoryFilter');
-        const platformFilter = document.getElementById('platformFilter');
-        const sortFilter = document.getElementById('sortFilter');
-
-        if (categoryFilter) {
-            categoryFilter.addEventListener('change', (e) => {
-                this.currentCategory = e.target.value;
-                this.renderProducts();
-            });
-        }
-
-        if (platformFilter) {
-            platformFilter.addEventListener('change', (e) => {
-                this.currentPlatform = e.target.value;
-                this.renderProducts();
-            });
-        }
-
-        if (sortFilter) {
-            sortFilter.addEventListener('change', (e) => {
-                this.currentSort = e.target.value;
-                this.renderProducts();
-            });
-        }
-
-        // Load more button
-        const loadMoreBtn = document.getElementById('loadMoreBtn');
-        if (loadMoreBtn) {
-            loadMoreBtn.addEventListener('click', () => {
-                this.visibleProducts += 6;
-                this.renderProducts();
-            });
-        }
-
-        // Smooth scroll for hero buttons
-        document.querySelectorAll('.hero-buttons a').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const target = e.target.getAttribute('href');
-                this.scrollToSection(target);
-            });
-        });
-    }
-
-    getAllProducts() {
-        return this.products;
-    }
-
-    getFilteredProducts() {
-        let filteredProducts = this.getAllProducts();
-
-        // Apply category filter
-        if (this.currentCategory !== 'all') {
-            console.log(`🔍 Filtering by category: ${this.currentCategory}`);
-            
-            filteredProducts = filteredProducts.filter(product => {
-                const productCategory = product.category?.toLowerCase() || '';
-                const productTitle = product.title?.toLowerCase() || '';
-                const filterCategory = this.currentCategory.toLowerCase();
-                
-                console.log(`Checking product: "${product.title}" | Category: "${product.category}"`);
-                
-                let isMatch = false;
-                
-                switch(filterCategory) {
-                    case 'pedais':
-                        isMatch = productCategory.includes('pedal') || 
-                                 productCategory.includes('distorção') || 
-                                 productCategory.includes('afinador') ||
-                                 productTitle.includes('pedal') ||
-                                 productTitle.includes('kokko') ||
-                                 productTitle.includes('distortion');
-                        break;
-                        
-                    case 'acessorios':
-                        isMatch = productCategory.includes('acessório') || 
-                                 productCategory.includes('cabo') || 
-                                 productCategory.includes('palheta') ||
-                                 productTitle.includes('palheta') ||
-                                 productTitle.includes('cabo') ||
-                                 productTitle.includes('alice');
-                        break;
-                        
-                    case 'homestudio':
-                        isMatch = productCategory.includes('interface') || 
-                                 productCategory.includes('monitor') || 
-                                 productCategory.includes('microfone') ||
-                                 productTitle.includes('interface') ||
-                                 productTitle.includes('monitor') ||
-                                 productTitle.includes('focusrite') ||
-                                 productTitle.includes('krk');
-                        break;
-                        
-                    case 'audiotech':
-                        isMatch = productCategory.includes('controlador') || 
-                                 productCategory.includes('midi') ||
-                                 productTitle.includes('midi') ||
-                                 productTitle.includes('controlador') ||
-                                 productTitle.includes('chocolate');
-                        break;
-                        
-                    case 'presets':
-                        isMatch = productCategory.includes('preset') || 
-                                 productCategory.includes('plugin') ||
-                                 productTitle.includes('preset') ||
-                                 productTitle.includes('plugin');
-                        break;
-                        
-                    default:
-                        isMatch = false;
-                }
-                
-                console.log(`${isMatch ? '✅' : '❌'} Product "${product.title}" matches filter "${filterCategory}": ${isMatch}`);
-                return isMatch;
-            });
-            
-            console.log(`📋 Filtered products count: ${filteredProducts.length}`);
-        }
-
-        // Apply search filter
-        if (this.searchTerm) {
-            filteredProducts = filteredProducts.filter(product =>
-                product.title.toLowerCase().includes(this.searchTerm) ||
-                (product.category && product.category.toLowerCase().includes(this.searchTerm))
-            );
-        }
-
-        // Apply platform filter
-        if (this.currentPlatform !== 'all') {
-            filteredProducts = filteredProducts.filter(product =>
-                product.platform.toLowerCase() === this.currentPlatform.toLowerCase()
-            );
-        }
-
-        // Apply sorting
-        if (this.currentSort !== 'default') {
-            filteredProducts = this.sortProducts(filteredProducts);
-        }
-
-        return filteredProducts;
-    }
-
-    sortProducts(products) {
-        return products.sort((a, b) => {
-            switch (this.currentSort) {
-                case 'price-low':
-                    return (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0);
-                case 'price-high':
-                    return (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0);
-                case 'rating':
-                    return (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0);
-                default:
-                    return 0;
-            }
-        });
-    }
-
-    renderProducts() {
-        const productsGrid = document.getElementById('productsGrid');
-        if (!productsGrid) return;
-
-        const filteredProducts = this.getFilteredProducts();
-        const visibleProducts = filteredProducts.slice(0, this.visibleProducts);
-
-        productsGrid.innerHTML = '';
-
-        visibleProducts.forEach(product => {
-            const productCard = this.createProductCard(product);
-            productsGrid.appendChild(productCard);
-        });
-
-        // Update load more button
-        const loadMoreBtn = document.getElementById('loadMoreBtn');
-        if (loadMoreBtn) {
-            if (filteredProducts.length <= this.visibleProducts) {
-                loadMoreBtn.style.display = 'none';
-            } else {
-                loadMoreBtn.style.display = 'block';
-            }
-        }
-
-        // Add loading animation
-        this.animateProducts();
-    }
-
-    createProductCard(product) {
-        const card = document.createElement('div');
-        card.className = 'product-card loading';
-
-        const platformName = this.getPlatformName(product.platform?.toLowerCase() || 'aliexpress');
-        const rating = product.rating || 4.0;
-        const reviews = product.reviews || 0;
-        const price = parseFloat(product.price) || 0;
-        const stars = this.generateStars(rating);
-
-        // Use placeholder image if none provided
-        const imageUrl = product.image || 'https://via.placeholder.com/300x200?text=Produto';
-
-        card.innerHTML = `
-            <img src="${imageUrl}" alt="${product.title}" class="product-image" onerror="this.src='https://via.placeholder.com/300x200?text=Produto'">
-            <div class="product-info">
-                <span class="product-platform platform-${product.platform?.toLowerCase() || 'aliexpress'}">${platformName}</span>
-                <h3 class="product-title">${product.title}</h3>
-                <div class="product-price">
-                    
-                </div>
-                <div class="product-rating">
-                    <span class="stars">${stars}</span>
-                    <span>(${reviews} ${reviews === 1 ? 'avaliação' : 'avaliações'})</span>
-                </div>
-                <a href="${product.link}" class="product-link" target="_blank">
-                    Ver Produto
-                </a>
-            </div>
-        `;
-
-        // Price section - only show current price
-        const priceSection = document.createElement('div');
-        priceSection.className = 'product-price';
-
-        const currentPrice = product.price > 0 ? product.price.toFixed(2) : '0,00';
-        priceSection.innerHTML = `<span class="current-price">R$ ${currentPrice}</span>`;
-
-        card.querySelector('.product-info').insertBefore(priceSection, card.querySelector('.product-rating'));
-        return card;
-    }
-
-    getPlatformName(platform) {
-        const platforms = {
-            aliexpress: 'AliExpress',
-            amazon: 'Amazon',
-            mercadolivre: 'Mercado Livre',
-            'mercado livre': 'Mercado Livre'
-        };
-        return platforms[platform?.toLowerCase()] || platform || 'AliExpress';
-    }
-
-    generateStars(rating) {
-        const fullStars = Math.floor(rating);
-        const hasHalfStar = rating % 1 !== 0;
-        let stars = '';
-
-        for (let i = 0; i < fullStars; i++) {
-            stars += '<i class="fas fa-star"></i>';
-        }
-
-        if (hasHalfStar) {
-            stars += '<i class="fas fa-star-half-alt"></i>';
-        }
-
-        const emptyStars = 5 - Math.ceil(rating);
-        for (let i = 0; i < emptyStars; i++) {
-            stars += '<i class="far fa-star"></i>';
-        }
-
-        return stars;
-    }
-
-    updateActiveTab(activeTab) {
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        activeTab.classList.add('active');
-    }
-
-    updateActiveNav(activeLink) {
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('active');
-        });
-        activeLink.classList.add('active');
-    }
-
-    scrollToSection(targetId) {
-        const element = document.querySelector(targetId);
-        if (element) {
-            element.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    }
-
-    initAnimations() {
-        // Intersection Observer for animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
-                }
-            });
-        });
-
-        // Observe elements for animation
-        document.querySelectorAll('.feature, .product-card').forEach(el => {
-            observer.observe(el);
-        });
-    }
-
-    animateProducts() {
-        const cards = document.querySelectorAll('.product-card.loading');
-        cards.forEach((card, index) => {
-            setTimeout(() => {
-                card.classList.remove('loading');
-            }, index * 100);
-        });
-    }
-}
-
-// Global function to update prices from links
-window.updatePricesFromLinks = async function() {
-    if (!productService) {
-        console.error('Product service not available');
-        return false;
-    }
-    
-    console.log('🔄 Iniciando atualização de preços...');
-    const success = await productService.updatePricesFromLinks();
-    
-    if (success) {
-        console.log('✅ Preços atualizados com sucesso!');
-        // Apenas recarregar se chamado manualmente, não automaticamente
-        return true;
-    } else {
-        console.error('❌ Erro ao atualizar preços');
-        return false;
-    }
+// Estado da aplicação
+let filteredProducts = [...productsData];
+let currentFilters = {
+    category: '',
+    priceRange: '',
+    search: ''
 };
 
-// Create update prices button
-function createUpdatePricesButton() {
-    const button = document.createElement('button');
-    button.id = 'updatePricesBtn';
-    button.innerHTML = '💰 Atualizar Preços';
-    button.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
-        background: #28a745;
-        color: white;
-        border: none;
-        padding: 12px 18px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: bold;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        transition: all 0.3s ease;
-    `;
-    
-    button.onmouseover = () => {
-        button.style.background = '#218838';
-        button.style.transform = 'translateY(-2px)';
-    };
-    
-    button.onmouseout = () => {
-        button.style.background = '#28a745';
-        button.style.transform = 'translateY(0)';
-    };
-    
-    button.onclick = async () => {
-        button.innerHTML = '⏳ Atualizando...';
-        button.style.background = '#ffc107';
-        button.disabled = true;
-        
-        try {
-            const success = await window.updatePricesFromLinks();
-            if (success) {
-                button.innerHTML = '✅ Atualizado!';
-                button.style.background = '#28a745';
-                // Recarregar apenas quando o usuário clica no botão
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1500);
-            } else {
-                button.innerHTML = '❌ Erro';
-                button.style.background = '#dc3545';
-                setTimeout(() => {
-                    button.innerHTML = '💰 Atualizar Preços';
-                    button.style.background = '#28a745';
-                    button.disabled = false;
-                }, 3000);
-            }
-        } catch (error) {
-            console.error('Erro:', error);
-            button.innerHTML = '❌ Erro';
-            button.style.background = '#dc3545';
-            setTimeout(() => {
-                button.innerHTML = '💰 Atualizar Preços';
-                button.style.background = '#28a745';
-                button.disabled = false;
-            }, 3000);
+// Elementos DOM
+const productsGrid = document.getElementById('products-grid');
+const categoryFilter = document.getElementById('category-filter');
+const priceFilter = document.getElementById('price-filter');
+const searchInput = document.getElementById('search-input');
+const searchBtn = document.getElementById('search-btn');
+const loading = document.getElementById('loading');
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', function() {
+    renderProducts(productsData);
+    setupEventListeners();
+});
+
+// Event Listeners
+function setupEventListeners() {
+    categoryFilter.addEventListener('change', handleCategoryFilter);
+    priceFilter.addEventListener('change', handlePriceFilter);
+    searchInput.addEventListener('input', handleSearch);
+    searchBtn.addEventListener('click', handleSearch);
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            handleSearch();
         }
-    };
-    
-    document.body.appendChild(button);
+    });
 }
 
-// Initialize the app when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    new AudioSpotApp();
+// Filtros
+function handleCategoryFilter() {
+    currentFilters.category = categoryFilter.value;
+    applyFilters();
+}
+
+function handlePriceFilter() {
+    currentFilters.priceRange = priceFilter.value;
+    applyFilters();
+}
+
+function handleSearch() {
+    currentFilters.search = searchInput.value.toLowerCase();
+    applyFilters();
+}
+
+function applyFilters() {
+    showLoading();
     
-    // Add update prices button after a short delay
     setTimeout(() => {
-        createUpdatePricesButton();
-    }, 1000);
-});
+        filteredProducts = productsData.filter(product => {
+            // Filtro por categoria
+            if (currentFilters.category && product.category !== currentFilters.category) {
+                return false;
+            }
+            
+            // Filtro por preço
+            if (currentFilters.priceRange) {
+                const price = product.discountPrice || product.originalPrice;
+                const [min, max] = currentFilters.priceRange.split('-').map(p => parseFloat(p) || Infinity);
+                if (price < min || (max !== Infinity && price > max)) {
+                    return false;
+                }
+            }
+            
+            // Filtro por busca
+            if (currentFilters.search) {
+                const searchText = product.title.toLowerCase();
+                if (!searchText.includes(currentFilters.search)) {
+                    return false;
+                }
+            }
+            
+            return true;
+        });
+        
+        hideLoading();
+        renderProducts(filteredProducts);
+    }, 500);
+}
+
+// Renderização
+function renderProducts(products) {
+    if (products.length === 0) {
+        productsGrid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">
+                <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                <h3>Nenhum produto encontrado</h3>
+                <p>Tente ajustar os filtros ou buscar por outros termos.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    productsGrid.innerHTML = products.map(product => createProductCard(product)).join('');
+}
+
+function createProductCard(product) {
+    const discountBadge = product.discount > 0 ? 
+        `<div class="discount-badge">-${product.discount}%</div>` : '';
+    
+    const commissionBadge = product.commissionRate > 0 ? 
+        `<div class="commission-badge">+${product.commissionRate}% cashback</div>` : '';
+    
+    const originalPriceDisplay = product.discount > 0 ? 
+        `<span class="original-price">R$ ${product.originalPrice.toFixed(2)}</span>` : '';
+    
+    const currentPrice = product.discountPrice || product.originalPrice;
+    
+    const rating = calculateRating(product.positiveFeedback);
+    const ratingStars = generateStars(rating);
+    
+    return `
+        <div class="product-card" onclick="openProduct('${product.trackingUrl}')">
+            <div class="product-image">
+                <img src="${product.imageUrl}" alt="${product.title}" loading="lazy" 
+                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5YTNhZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlbSBuYW8gZGlzcG9uaXZlbDwvdGV4dD48L3N2Zz4='">
+                ${discountBadge}
+                ${commissionBadge}
+            </div>
+            <div class="product-info">
+                <h3 class="product-title">${product.title}</h3>
+                <div class="price-section">
+                    <span class="current-price">R$ ${currentPrice.toFixed(2)}</span>
+                    ${originalPriceDisplay}
+                </div>
+                <div class="product-stats">
+                    <div class="rating">
+                        <span class="stars">${ratingStars}</span>
+                        <span>${product.positiveFeedback}%</span>
+                    </div>
+                    <div class="sales">
+                        <i class="fas fa-shopping-cart"></i>
+                        ${product.sales180Day} vendas
+                    </div>
+                </div>
+                <a href="${product.trackingUrl}" target="_blank" class="buy-button" onclick="event.stopPropagation();">
+                    <i class="fas fa-external-link-alt"></i>
+                    Ver no AliExpress
+                </a>
+            </div>
+        </div>
+    `;
+}
+
+// Utilitários
+function calculateRating(positiveFeedback) {
+    if (positiveFeedback >= 98) return 5;
+    if (positiveFeedback >= 95) return 4.5;
+    if (positiveFeedback >= 90) return 4;
+    if (positiveFeedback >= 80) return 3.5;
+    if (positiveFeedback >= 70) return 3;
+    return 2.5;
+}
+
+function generateStars(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    
+    return '★'.repeat(fullStars) + 
+           (hasHalfStar ? '☆' : '') + 
+           '☆'.repeat(emptyStars);
+}
+
+function openProduct(url) {
+    window.open(url, '_blank');
+}
+
+function showLoading() {
+    loading.style.display = 'block';
+    productsGrid.style.opacity = '0.5';
+}
+
+function hideLoading() {
+    loading.style.display = 'none';
+    productsGrid.style.opacity = '1';
+}
+
+// Analytics (opcional)
+function trackProductClick(productId, productTitle) {
+    console.log('Produto clicado:', productId, productTitle);
+    // Aqui você pode implementar tracking com Google Analytics, Facebook Pixel, etc.
+}

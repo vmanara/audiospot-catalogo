@@ -1,501 +1,110 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AudioSpot - Equipamentos Musicais</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
+    <title>AudioSpot - Catálogo de Produtos</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <div class="container">
-            <div class="logo">
-                <img src="assets_logo/AudioSpot-logo-fundo-transparente_1752863107224.png" alt="AudioSpot">
-            </div>
-            <nav class="nav">
-                <a href="#home" class="nav-link active">Home</a>
-                <a href="#produtos" class="nav-link">Produtos</a>
-                <a href="#contato" class="nav-link">Contato</a>
+            <nav class="nav-menu">
+                <a href="https://audiospot.com.br" class="nav-home">Home</a>
             </nav>
+            <div class="logo">
+                <img src="attached_assets/AudioSpot-logo-branco-fundo-transparente_1753733308981.png" alt="AudioSpot" class="logo-img">
+            </div>
+            <h1 class="site-title">Catálogo de Produtos</h1>
+            <p class="site-subtitle">Equipamentos de áudio, música e tecnologia</p>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
+    <main class="main">
         <div class="container">
-            <div class="hero-content">
-                <h2>Vitrine de Equipamentos Musicais</h2>
-                <p>Explore nossa seleção curada dos melhores produtos musicais com os melhores preços das principais plataformas</p>
-                <div class="hero-buttons">
-                    <a href="#produtos" class="btn btn-primary">Explorar Vitrine</a>
+            <div class="filters-section">
+                <h2>Filtros</h2>
+                <div class="filter-group">
+                    <label for="category-filter">Categoria:</label>
+                    <select id="category-filter">
+                        <option value="">Todas as categorias</option>
+                        <option value="audio">Áudio e Microfones</option>
+                        <option value="instruments">Instrumentos Musicais</option>
+                        <option value="tech">Tecnologia</option>
+                        <option value="accessories">Acessórios</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="price-filter">Faixa de Preço:</label>
+                    <select id="price-filter">
+                        <option value="">Todos os preços</option>
+                        <option value="0-100">Até R$ 100</option>
+                        <option value="100-300">R$ 100 - R$ 300</option>
+                        <option value="300-500">R$ 300 - R$ 500</option>
+                        <option value="500-1000">R$ 500 - R$ 1.000</option>
+                        <option value="1000+">Acima de R$ 1.000</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <input type="text" id="search-input" placeholder="Buscar produtos...">
+                    <button id="search-btn"><i class="fas fa-search"></i></button>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Search Section -->
-    <section class="search-section">
-        <div class="container">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Buscar produtos...">
+            <div class="products-grid" id="products-grid">
+                <!-- Produtos serão carregados aqui pelo JavaScript -->
             </div>
-            <div class="filters">
-                <select id="categoryFilter">
-                    <option value="all">Todas as Categorias</option>
-                    <option value="pedais">Pedais & Efeitos</option>
-                    <option value="acessorios">Acessórios</option>
-                    <option value="homestudio">Home Studio</option>
-                    <option value="audiotech">Audio Tech</option>
-                    <option value="presets">Presets & Plugins</option>
-                </select>
-                <select id="platformFilter">
-                    <option value="all">Todas as Plataformas</option>
-                    <option value="aliexpress">AliExpress</option>
-                    <option value="amazon">Amazon</option>
-                    <option value="mercadolivre">Mercado Livre</option>
-                </select>
-                <select id="sortFilter">
-                    <option value="default">Ordenar por</option>
-                    <option value="price-low">Menor Preço</option>
-                    <option value="price-high">Maior Preço</option>
-                    <option value="rating">Melhor Avaliado</option>
-                </select>
+
+            <div class="loading" id="loading" style="display: none;">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Carregando produtos...</p>
             </div>
         </div>
-    </section>
+    </main>
 
-    <!-- Products Section -->
-    <section id="produtos" class="products-section">
-        <div class="container">
-            <h2 class="section-title">Produtos em Destaque</h2>
-            
-            <!-- Category Tabs -->
-            <div class="category-tabs">
-                <button class="tab-btn active" data-category="all">Todos</button>
-                <button class="tab-btn" data-category="pedais">Pedais & Efeitos</button>
-                <button class="tab-btn" data-category="acessorios">Acessórios</button>
-                <button class="tab-btn" data-category="homestudio">Home Studio</button>
-                <button class="tab-btn" data-category="audiotech">Audio Tech</button>
-                <button class="tab-btn" data-category="presets">Presets & Plugins</button>
-            </div>
-
-            <!-- Products Grid -->
-            <div class="products-grid" id="productsGrid">
-                <!-- Products will be inserted here -->
-            </div>
-
-            <!-- Load More Button -->
-            <div class="load-more">
-                <button class="btn btn-primary" id="loadMoreBtn">Carregar Mais</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <div class="footer-logo">
-                        <img src="assets_logo/AudioSpot-logo-fundo-transparente_1752863107224.png" alt="AudioSpot">
-                        <h3>AudioSpot</h3>
-                    </div>
+                    <h3>AudioSpot</h3>
                     <p>Vitrine de equipamentos musicais das melhores plataformas</p>
                 </div>
+                
                 <div class="footer-section">
                     <h4>Plataformas</h4>
                     <ul>
-                        <li><a href="#">AliExpress</a></li>
-                        <li><a href="#">Amazon</a></li>
-                        <li><a href="#">Mercado Livre</a></li>
+                        <li>AliExpress</li>
+                        <li>Amazon</li>
+                        <li>Mercado Livre</li>
                     </ul>
                 </div>
+                
                 <div class="footer-section">
                     <h4>Categorias</h4>
                     <ul>
-                        <li><a href="#">Pedais & Efeitos</a></li>
-                        <li><a href="#">Acessórios</a></li>
-                        <li><a href="#">Home Studio</a></li>
-                        <li><a href="#">Audio Tech</a></li>
+                        <li>Pedais & Efeitos</li>
+                        <li>Acessórios</li>
+                        <li>Home Studio</li>
+                        <li>Audio Tech</li>
                     </ul>
                 </div>
+                
                 <div class="footer-section">
                     <h4>Contato</h4>
                     <p>contato@audiospot.com</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
+                    <p>Instagram: @audiospotbr</p>
                 </div>
             </div>
+            
             <div class="footer-bottom">
                 <p>&copy; 2024 AudioSpot. Todos os direitos reservados.</p>
+                <p>Preços e ofertas podem variar. Links de afiliados incluídos.</p>
+                <p class="affiliate-disclaimer">Produtos com links afiliados, com melhores preços e de vendedores escolhidos, direto do AliExpress, Amazon Brasil e Mercado Livre.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Supabase Library -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    
-    <!-- Main Application Script -->
-    <script>
-        // Global variables
-        window.supabaseClient = null;
-        
-        // Supabase configuration
-        const supabaseUrl = 'https://kkyocjjhwmmtetfxmbha.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtreW9jampod21tdGV0ZnhtYmhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MjQwMzYsImV4cCI6MjA2ODUwMDAzNn0.XdGYOVvTXHlXnKXSCiIIUgfx_ngu4cpcIIvebpYDQ04';
-
-        // Initialize Supabase
-        function initSupabase() {
-            try {
-                if (window.supabase && window.supabase.createClient) {
-                    window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-                    console.log('✅ Supabase initialized');
-                    return true;
-                }
-            } catch (error) {
-                console.error('❌ Supabase init error:', error);
-            }
-            return false;
-        }
-
-        // Main App Class
-        class AudioSpotApp {
-            constructor() {
-                this.products = [];
-                this.visibleProducts = 6;
-                this.currentCategory = 'all';
-                this.init();
-            }
-
-            async init() {
-                console.log('🚀 Initializing AudioSpot...');
-                
-                // Wait for Supabase
-                let attempts = 0;
-                while (!initSupabase() && attempts < 20) {
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    attempts++;
-                }
-
-                if (!window.supabaseClient) {
-                    this.showError('Não foi possível conectar ao banco de dados');
-                    return;
-                }
-
-                await this.loadProducts();
-                this.setupEventListeners();
-                this.renderProducts();
-            }
-
-            async loadProducts() {
-                if (!window.supabaseClient) {
-                    this.showError('Cliente Supabase não disponível');
-                    return;
-                }
-
-                try {
-                    console.log('🔍 Carregando produtos...');
-                    
-                    const [aliexpressResult, amazonResult, mercadolivreResult] = await Promise.allSettled([
-                        window.supabaseClient.from('aliexpress_products').select('*'),
-                        window.supabaseClient.from('amazon_products').select('*'),
-                        window.supabaseClient.from('mercadolivre_products').select('*')
-                    ]);
-
-                    let allProducts = [];
-
-                    // Process results
-                    if (aliexpressResult.status === 'fulfilled' && aliexpressResult.value.data) {
-                        const products = aliexpressResult.value.data.map(p => ({...p, platform: 'aliexpress'}));
-                        allProducts = allProducts.concat(products);
-                        console.log(`✅ ${products.length} produtos AliExpress`);
-                    }
-
-                    if (amazonResult.status === 'fulfilled' && amazonResult.value.data) {
-                        const products = amazonResult.value.data.map(p => ({...p, platform: 'amazon'}));
-                        allProducts = allProducts.concat(products);
-                        console.log(`✅ ${products.length} produtos Amazon`);
-                    }
-
-                    if (mercadolivreResult.status === 'fulfilled' && mercadolivreResult.value.data) {
-                        const products = mercadolivreResult.value.data.map(p => ({...p, platform: 'mercadolivre'}));
-                        allProducts = allProducts.concat(products);
-                        console.log(`✅ ${products.length} produtos Mercado Livre`);
-                    }
-
-                    this.products = allProducts;
-                    console.log(`📊 Total: ${this.products.length} produtos`);
-
-                    if (this.products.length === 0) {
-                        this.showNoProducts();
-                    }
-
-                } catch (error) {
-                    console.error('❌ Erro ao carregar produtos:', error);
-                    this.showError('Erro ao carregar produtos');
-                }
-            }
-
-            setupEventListeners() {
-                // Search
-                const searchInput = document.getElementById('searchInput');
-                if (searchInput) {
-                    searchInput.addEventListener('input', (e) => {
-                        this.searchTerm = e.target.value.toLowerCase();
-                        this.renderProducts();
-                    });
-                }
-
-                // Category tabs
-                document.querySelectorAll('.tab-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        this.currentCategory = e.target.dataset.category;
-                        this.updateActiveTab(e.target);
-                        this.renderProducts();
-                    });
-                });
-
-                // Load more
-                const loadMoreBtn = document.getElementById('loadMoreBtn');
-                if (loadMoreBtn) {
-                    loadMoreBtn.addEventListener('click', () => {
-                        this.visibleProducts += 6;
-                        this.renderProducts();
-                    });
-                }
-            }
-
-            getFilteredProducts() {
-                let filtered = [...this.products];
-
-                // Category filter
-                if (this.currentCategory !== 'all') {
-                    console.log(`🔍 Filtering by category: ${this.currentCategory}`);
-                    
-                    filtered = filtered.filter(product => {
-                        const productCategory = product.category?.toLowerCase() || '';
-                        const productTitle = product.title?.toLowerCase() || '';
-                        const filterCategory = this.currentCategory.toLowerCase();
-                        
-                        console.log(`Checking: "${product.title}" | Category: "${product.category}"`);
-                        
-                        let isMatch = false;
-                        
-                        switch(filterCategory) {
-                            case 'pedais':
-                                isMatch = productCategory.includes('pedal') || 
-                                         productCategory.includes('distorção') || 
-                                         productCategory.includes('afinador') ||
-                                         productTitle.includes('pedal') ||
-                                         productTitle.includes('kokko') ||
-                                         productTitle.includes('distortion');
-                                break;
-                                
-                            case 'acessorios':
-                                isMatch = productCategory.includes('acessório') || 
-                                         productCategory.includes('cabo') || 
-                                         productCategory.includes('palheta') ||
-                                         productTitle.includes('palheta') ||
-                                         productTitle.includes('cabo') ||
-                                         productTitle.includes('alice');
-                                break;
-                                
-                            case 'homestudio':
-                                isMatch = productCategory.includes('interface') || 
-                                         productCategory.includes('monitor') || 
-                                         productCategory.includes('microfone') ||
-                                         productTitle.includes('interface') ||
-                                         productTitle.includes('monitor') ||
-                                         productTitle.includes('focusrite') ||
-                                         productTitle.includes('krk');
-                                break;
-                                
-                            case 'audiotech':
-                                isMatch = productCategory.includes('controlador') || 
-                                         productCategory.includes('midi') ||
-                                         productTitle.includes('midi') ||
-                                         productTitle.includes('controlador') ||
-                                         productTitle.includes('chocolate');
-                                break;
-                                
-                            case 'presets':
-                                isMatch = productCategory.includes('preset') || 
-                                         productCategory.includes('plugin') ||
-                                         productTitle.includes('preset') ||
-                                         productTitle.includes('plugin');
-                                break;
-                                
-                            default:
-                                isMatch = false;
-                        }
-                        
-                        console.log(`${isMatch ? '✅' : '❌'} "${product.title}" matches "${filterCategory}": ${isMatch}`);
-                        return isMatch;
-                    });
-                    
-                    console.log(`📋 Filtered products: ${filtered.length}`);
-                }
-
-                // Search filter
-                if (this.searchTerm) {
-                    filtered = filtered.filter(p =>
-                        p.title?.toLowerCase().includes(this.searchTerm) ||
-                        p.category?.toLowerCase().includes(this.searchTerm)
-                    );
-                }
-
-                return filtered;
-            }
-
-            renderProducts() {
-                const grid = document.getElementById('productsGrid');
-                if (!grid) return;
-
-                const filtered = this.getFilteredProducts();
-                const visible = filtered.slice(0, this.visibleProducts);
-
-                if (visible.length === 0) {
-                    this.showNoProducts();
-                    return;
-                }
-
-                grid.innerHTML = '';
-
-                visible.forEach(product => {
-                    const card = this.createProductCard(product);
-                    grid.appendChild(card);
-                });
-
-                // Update load more button
-                const loadMoreBtn = document.getElementById('loadMoreBtn');
-                if (loadMoreBtn) {
-                    loadMoreBtn.style.display = 
-                        filtered.length <= this.visibleProducts ? 'none' : 'block';
-                }
-            }
-
-            createProductCard(product) {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-
-                const platformName = this.getPlatformName(product.platform);
-                const price = parseFloat(product.price) || 0;
-                const rating = product.rating || 4.0;
-                const reviews = product.reviews || 0;
-
-                card.innerHTML = `
-                    <img src="${product.image || 'https://via.placeholder.com/300x200?text=Produto'}" 
-                         alt="${product.title}" 
-                         class="product-image" 
-                         onerror="this.src='https://via.placeholder.com/300x200?text=Produto'">
-                    <div class="product-info">
-                        <span class="product-platform platform-${product.platform?.toLowerCase()}">${platformName}</span>
-                        <h3 class="product-title">${product.title}</h3>
-                        <div class="product-price">
-                            <span class="current-price">R$ ${price.toFixed(2)}</span>
-                        </div>
-                        <div class="product-rating">
-                            <span class="stars">${this.generateStars(rating)}</span>
-                            <span>(${reviews} ${reviews === 1 ? 'avaliação' : 'avaliações'})</span>
-                        </div>
-                        <a href="${product.link}" class="product-link" target="_blank">
-                            Ver Produto
-                        </a>
-                    </div>
-                `;
-
-                return card;
-            }
-
-            getPlatformName(platform) {
-                const platforms = {
-                    aliexpress: 'AliExpress',
-                    amazon: 'Amazon',
-                    mercadolivre: 'Mercado Livre'
-                };
-                return platforms[platform?.toLowerCase()] || platform || 'AliExpress';
-            }
-
-            generateStars(rating) {
-                const fullStars = Math.floor(rating);
-                const hasHalf = rating % 1 !== 0;
-                let stars = '';
-
-                for (let i = 0; i < fullStars; i++) {
-                    stars += '<i class="fas fa-star"></i>';
-                }
-
-                if (hasHalf) {
-                    stars += '<i class="fas fa-star-half-alt"></i>';
-                }
-
-                const empty = 5 - Math.ceil(rating);
-                for (let i = 0; i < empty; i++) {
-                    stars += '<i class="far fa-star"></i>';
-                }
-
-                return stars;
-            }
-
-            updateActiveTab(activeTab) {
-                document.querySelectorAll('.tab-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                activeTab.classList.add('active');
-            }
-
-            showError(message) {
-                const grid = document.getElementById('productsGrid');
-                if (grid) {
-                    grid.innerHTML = `
-                        <div style="text-align: center; padding: 40px; grid-column: 1/-1;">
-                            <h3>❌ ${message}</h3>
-                            <button onclick="window.location.reload()" 
-                                    style="padding: 10px 20px; margin-top: 10px; background: #FF6B35; color: white; border: none; border-radius: 8px; cursor: pointer;">
-                                🔄 Tentar Novamente
-                            </button>
-                        </div>
-                    `;
-                }
-            }
-
-            showNoProducts() {
-                const grid = document.getElementById('productsGrid');
-                if (grid) {
-                    grid.innerHTML = `
-                        <div style="text-align: center; padding: 40px; grid-column: 1/-1;">
-                            <h3>📦 Nenhum Produto Encontrado</h3>
-                            <p>Os produtos estão sendo carregados...</p>
-                        </div>
-                    `;
-                }
-            }
-        }
-
-        // Initialize when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('🎯 DOM Ready - Starting AudioSpot');
-            new AudioSpotApp();
-        });
-
-        // Smooth scrolling
-        document.addEventListener('click', (e) => {
-            if (e.target.matches('a[href^="#"]')) {
-                e.preventDefault();
-                const target = document.querySelector(e.target.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
