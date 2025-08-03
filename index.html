@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -23,6 +24,22 @@
 
     <main class="main">
         <div class="container">
+            <!-- Abas dos Marketplaces -->
+            <div class="marketplace-tabs">
+                <button class="tab-button active" data-marketplace="all">
+                    <i class="fas fa-globe"></i>
+                    Todos os Produtos
+                </button>
+                <button class="tab-button" data-marketplace="aliexpress">
+                    <i class="fas fa-shopping-bag"></i>
+                    AliExpress
+                </button>
+                <button class="tab-button" data-marketplace="mercadolivre">
+                    <i class="fas fa-store"></i>
+                    Mercado Livre
+                </button>
+            </div>
+
             <div class="filters-section">
                 <h2>Filtros</h2>
                 <div class="filter-group">
@@ -61,6 +78,11 @@
                 </div>
             </div>
 
+            <!-- Contador de produtos -->
+            <div class="products-counter">
+                <span id="products-count">Carregando produtos...</span>
+            </div>
+
             <div class="products-grid" id="products-grid">
                 <!-- Produtos serão carregados aqui pelo JavaScript -->
             </div>
@@ -81,11 +103,11 @@
                 </div>
                 
                 <div class="footer-section">
-                    <h4>Plataformas</h4>
+                    <h4>Marketplaces</h4>
                     <ul>
                         <li>AliExpress</li>
-                        <li>Amazon</li>
                         <li>Mercado Livre</li>
+                        <li>Amazon Brasil</li>
                     </ul>
                 </div>
                 
@@ -93,9 +115,9 @@
                     <h4>Categorias</h4>
                     <ul>
                         <li>Pedais & Efeitos</li>
-                        <li>Acessórios</li>
-                        <li>Home Studio</li>
-                        <li>Audio Tech</li>
+                        <li>Instrumentos Musicais</li>
+                        <li>Áudio & Microfones</li>
+                        <li>Tecnologia</li>
                     </ul>
                 </div>
                 
@@ -109,7 +131,7 @@
             <div class="footer-bottom">
                 <p>&copy; 2024 AudioSpot. Todos os direitos reservados.</p>
                 <p>Preços e ofertas podem variar. Links de afiliados incluídos.</p>
-                <p class="affiliate-disclaimer">Produtos com links afiliados, com melhores preços e de vendedores escolhidos, direto do AliExpress, Amazon Brasil e Mercado Livre.</p>
+                <p class="affiliate-disclaimer">Produtos com links afiliados, com melhores preços e de vendedores escolhidos, direto do AliExpress e Mercado Livre.</p>
             </div>
         </div>
     </footer>
